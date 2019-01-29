@@ -1,0 +1,58 @@
+In this paper, we proposed a language-based approach for the integration of
+disparate IoT platforms. We built our treatment on the Jolie programming
+language. This first result is an initial step towards a more comprehensive
+solution for IoT ecosystem integration and management. Concretely, we included
+in Jolie the support for two of the most widely used IoT protocols. The
+inclusion enables Jolie programmers to interact with the majority of present IoT
+devices. Summarizing our results: \emph{i}) we included in Jolie the CoAP
+application protocol, also extending the Jolie language to support the UDP
+transport protocol, \emph{ii}) we added the support for the MQTT protocol and,
+in doing so, \emph{iii}) we tackled the challenging problem of mapping the
+renowned pattern of request-responses (typical of HTTP and other widely used
+protocols) into the publish/subscribe message pattern of MQTT.\@ The mapping
+abstracts from peculiarities of MQTT and is applicable to any publish/subscribe
+protocol.
+
+Regarding future work, we are currently investigating the integration in Jolie
+of more IoT protocols~\cite{7123563}, in order to extend the usability of the
+language in the IoT setting.
+
+It would also be interesting to extend not only Jolie practice as we
+have done, but also Jolie formal semantics~\cite{Guidi2006}. To this
+end we can take ideas from the formal model of IoT systems presented
+in~\cite{LaneseBF13}.
+
+%%%%%%%%%%%%%%%
+%Another interesting direction comes from the inclusion of publish/subscribe
+%protocols in Jolie. Indeed, the publish/subscribe pattern is renowned for
+%enabling high scalability of networks, as well as supporting flexible and highly
+%dynamic network topologies~\cite{eugster03}. Our intuition is that, besides
+%efficiency and scalability, publish/subscribe architectures can achieve a higher
+%degree of reliability if programmed using the Jolie language.
+%%%%%%%%%%%%%%%
+% Moreover, the
+% communication abstractions provided by the language avoid the use of callbacks,
+% which are difficult to program, debug, and are one of the main causes of errors
+% in concurrent and distributed systems~\cite{fukuda15}.
+
+Another interesting direction for future developments is studying how Jolie
+can support the testing of IoT technologies, e.g., to test how
+different protocol stacks perform over a given IoT topology. Thanks to the
+simplicity of changing the combination of the used protocols (application and
+transport), experimenters can quickly test many configurations, also enjoying
+a more reliable platform to compare them. Indeed, usually even changing one
+of the protocols in the configured stack would require an almost complete
+rewrite of the logic of network components. Contrarily, in Jolie, this change
+just requires an update of the deployment part of programs, leaving the logic
+unaffected. Moreover, such an update could even be done programmatically,
+making the practice of repeated experimenting on IoT networks easier and more
+standardized.
+
+Finally, as future work, we also consider the possibility of developing a
+light-weight version of the language, to be used on low-power IoT devices.
+Indeed, in this paper, we assumed that these devices are programmed with
+low-level languages, since they can support only a very constrained execution
+environment. Clearly, letting programmers develop all the components of an IoT
+network in the same language would not only ease its implementation but also
+testability, deployment, and maintenance. However, achieving such a result
+would require a very challenging engineering endeavor.

@@ -1,0 +1,149 @@
+  \documentclass[lnbip]{svmultln}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{ragged2e}
+\usepackage[bookmarks=false,colorlinks,urlcolor=blue,%
+linkcolor=magenta,citecolor=red,linktocpage=true,breaklinks=true]{hyperref}
+\usepackage{cleveref}
+\usepackage{xspace}
+\usepackage{graphics}
+\usepackage{inconsolata}
+\usepackage{xcolor}
+\usepackage{fancyvrb}
+\usepackage{listings}
+\lstset{escapeinside={<@}{@>}}
+\usepackage{xparse}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{pgf-umlsd}
+ 
+% \linespread{.97}
+% \usepackage[backend=bibtex,style=ieee,giveninits,maxnames=2,minnames=1]
+% {biblatex}
+
+% \AtEveryBibitem{\clearfield{pages}}
+% \AtEveryBibitem{\clearfield{volume}}
+% \AtEveryBibitem{\clearfield{number}}
+% \addbibresource{biblio.bib}
+
+\include{macros}
+
+\usepackage[textsize=tiny,linecolor=teal,%
+bordercolor=teal,backgroundcolor=lime!25]{todonotes} % for margin
+\setlength{\marginparwidth}{2cm}
+
+\begin{document}
+
+\mainmatter              % start of the contribution
+
+\title{Linguistic Abstractions for\\ Interoperability of IoT Platforms}
+
+\titlerunning{Language Abstractions for Interoperability of IoT
+Platforms}  % abbreviated title (for running head)
+
+\author{Maurizio Gabbrielli\inst{1} \and 
+Saverio Giallorenzo\inst{2} \and 
+Ivan Lanese\inst{1} \and Stefano Pio
+Zingaro \inst{1}}
+%
+\authorrunning{Gabbrielli M. et al.}   % abbreviated author list (for
+% running head)
+%
+%%%% list of authors for the TOC (use if author list has to be modified)
+\tocauthor{Maurizio Gabbrielli, Saverio Giallorenzo, Ivan Lanese, Stefano Pio
+Zingaro}
+%
+\institute{Universit\`a di Bologna / INRIA \\
+\and
+University of Southern Denmark}
+
+\maketitle
+
+% The Internet of Things (IoT) promotes the communication among
+% heterogeneous entities, from small sensors to Cloud systems. However,
+% this is realized using a wide range of communication media and data
+% protocols, usually incompatible with each other. Thus, IoT systems
+% tend to grow as homogeneous isolated platforms, which hardly
+% interact. In this paper we propose a language-based approach for
+% communication technology integration to achieve a higher degree of
+% interoperability among disparate IoT platforms. We build on the Jolie
+% programming language, which provides uniform linguistic abstractions
+% to exploit heterogeneous communication stacks, allowing the programmer
+% to specify in a declarative way the desired stack, and to easily
+% change it, even at runtime.  Jolie currently supports the main
+% technologies from Service-Oriented Computing, such as TCP/IP,
+% Bluetooth, and RMI at transport level, and HTTP and SOAP at
+% application level. We integrate in Jolie the two most adopted
+% protocols for IoT communication, i.e., CoAP and MQTT. We report our
+% experience, including a case study in the home automation area, and we
+% present high-level concepts valuable both for the general
+% implementation of interoperable systems and for the development of
+% other language-based solutions.
+
+\begin{abstract}
+The Internet of Things (IoT) advocates for multi-layered platforms---from edge
+devices to Cloud nodes---where each layer adopts its own communication
+standards (media and data formats). While this freedom is optimal for in-layer
+communication, it puzzles cross-layer integration due to incompatibilities
+among standards. Also enforcing a unique communication stack within the same
+IoT platform is not a solution, as it leads to the current phenomenon of ``IoT
+islands'', where disparate platforms hardly interact with each other. In this
+paper we tackle the problem of IoT cross-layer and cross-platform integration
+following a language-based approach. We build on the Jolie programming
+language, which provides uniform linguistic abstractions to exploit
+heterogeneous communication stacks, allowing the programmer to specify in a
+declarative way the desired stack, and to easily change it, even at runtime.
+Jolie currently supports the main technologies from Service-Oriented Computing,
+such as TCP/IP, Bluetooth, and RMI at transport level, and HTTP and SOAP at
+application level. We integrate in Jolie the two most adopted protocols for IoT
+communication, i.e., CoAP and MQTT. We report our experience on a case study on
+Cloud-based home automation, and we present high-level concepts valuable both
+for the general implementation of interoperable systems and for the development
+of other language-based solutions.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+\input{intro}
+
+\section{JIoT: Jolie for IoT}
+\label{sec:challenges}
+\input{challenges}
+
+\section{Supporting CoAP in Jolie}
+\label{sub:coap}
+\input{coap}
+
+\section{Supporting MQTT in Jolie}
+\label{sub:mqtt}
+\input{mqtt}
+
+\section{Implementation}
+\label{sub:implementation}
+\input{implementation}
+
+\section{Case Study}
+\label{sub:case}
+\input{case}
+
+\section{Related Work}
+\label{sec:related}
+\input{related}
+
+\section{Discussion and Conclusion}
+\label{conclusion}
+\input{conclusion}
+
+\subsubsection*{Acknowledgments} % (fold)
+We thank Marco Di Felice, Luca Bedogni, and Federico Montori for useful
+suggestions and comments.
+
+% section section_name (end)
+
+% \vspace{5em}
+
+\bibliographystyle{ieeetr}
+{\bibliography{biblio}}
+
+\end{document}

@@ -1,0 +1,223 @@
+\begin{thebibliography}{10}
+
+\bibitem{GubbiBMP13}
+J.~Gubbi, R.~Buyya, S.~Marusic, and M.~Palaniswami, ``Internet of {T}hings
+  ({IoT}): {A} vision, architectural elements, and future directions,'' {\em
+  Future Generation Comp. Syst.}, vol.~29, no.~7, pp.~1645--1660, 2013.
+
+\bibitem{Atzori20102787}
+L.~Atzori, A.~Iera, and G.~Morabito, ``The {I}nternet of {T}hings: A survey,''
+  {\em Computer Networks}, vol.~54, no.~15, pp.~2787 -- 2805, 2010.
+
+\bibitem{7123563}
+A.~Al-Fuqaha, M.~Guizani, M.~Mohammadi, M.~Aledhari, and M.~Ayyash, ``Internet
+  of {T}hings: {A} survey on enabling technologies, protocols, and
+  applications,'' {\em IEEE Communications Surveys Tutorials}, vol.~17, no.~4,
+  pp.~2347--2376, 2015.
+
+\bibitem{coap}
+C.~Bormann, ``{CoAP} website.'' \url{http://coap.technology/}, 2016.
+
+\bibitem{doi:10.17487/RFC7252}
+Z.~Shelby, K.~Hartke, and C.~Bormann, ``The {C}onstrained {A}pplication
+  {P}rotocol ({CoAP}),'' RFC 7252, IETF, 2014.
+
+\bibitem{mqtt}
+{MQTT community}, ``{MQTT} website.'' \url{http://mqtt.org}, 2014.
+
+\bibitem{mqtt-v3.1.1}
+A.~Banks and R.~Gupta, ``{MQTT} {V}ersion 3.1.1,'' {O}asis standard, Oasis,
+  2014.
+\newblock Available at \url{http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/}.
+
+\bibitem{Milenkovic:2015:CII:2843962.2822643}
+M.~Milenkovic, ``A case for interoperable {IoT} sensor data and meta-data
+  formats: {T}he {I}nternet of {T}hings ({U}biquity symposium),'' {\em
+  Ubiquity}, pp.~2:1--2:7, 2015.
+
+\bibitem{richardson2008restful}
+L.~Richardson and S.~Ruby, {\em RESTful web services}.
+\newblock O'Reilly Media, Inc., 2008.
+
+\bibitem{garg2013apache}
+N.~Garg, {\em Apache Kafka}.
+\newblock Packt Publishing Ltd, 2013.
+
+\bibitem{Soursos16}
+S.~Soursos, I.~P. Žarko, P.~Zwickl, I.~Gojmerac, G.~Bianchi, and G.~Carrozzo,
+  ``Towards the cross-domain interoperability of {IoT} platforms,'' in {\em
+  EuCNC}, pp.~398--402, {IEEE}, 2016.
+
+\bibitem{Gojmerac16}
+I.~Gojmerac, P.~Reichl, I.~Podnar~{\v{Z}}arko, and S.~Soursos, ``Bridging {IoT}
+  islands: the {symbIoTe} project,'' {\em Elektrotechnik und
+  Informationstechnik}, vol.~133, no.~7, pp.~315--318, 2016.
+
+\bibitem{biotope}
+``The b{IoT}ope project.'' \url{http://www.biotope-project.eu/}, 2017.
+
+\bibitem{Erl07}
+T.~Erl, {\em Soa: principles of service design}.
+\newblock Prentice Hall Press, 2007.
+
+\bibitem{MONTESI200719}
+F.~Montesi, C.~Guidi, R.~Lucchi, and G.~Zavattaro, ``{JOLIE}: a {J}ava
+  {O}rchestration {L}anguage {I}nterpreter {E}ngine,'' {\em ENTCS}, vol.~181,
+  pp.~19 -- 33, 2007.
+
+\bibitem{MGZ07}
+F.~Montesi, C.~Guidi, and G.~Zavattaro, ``Composing services with {JOLIE},'' in
+  {\em ECOWS}, pp.~13--22, {IEEE}, 2007.
+
+\bibitem{MontesiGZ14}
+F.~Montesi, C.~Guidi, and G.~Zavattaro, ``Service-oriented programming with
+  {J}olie,'' in {\em Web Services Foundations}, pp.~81--107, Springer, 2014.
+
+\bibitem{jolie-lang}
+``{J}olie website.'' \url{http://jolie-lang.org}, 2017.
+
+\bibitem{jiot}
+M.~Gabbrielli, S.~Giallorenzo, I.~Lanese, and S.~P. Zingaro, ``{Jolie} for
+  {IoT} website.'' \url{http://www.cs.unibo.it/projects/jolie/jiot.html}, 2017.
+
+\bibitem{req-rep}
+W3C, ``Transport message exchange pattern: Single-request-response.''
+  \url{https://www.w3.org/2000/xp/Group/1/10/11/2001-10-11-SRR-Transport_MEP},
+  2001.
+
+\bibitem{GabbrielliGLZ18}
+M.~Gabbrielli, S.~Giallorenzo, I.~Lanese, and S.~P. Zingaro, ``A language-based
+  approach for interoperability of {IoT} platforms,'' in {\em HICSS}, {AIS}
+  Electronic Library (AISeL), 2018.
+
+\bibitem{w3c17}
+``Web of {T}hings.'' \url{https://www.w3.org/WoT/}, 2017.
+
+\bibitem{fielding00}
+R.~T. Fielding, {\em Architectural styles and the design of network-based
+  software architectures}.
+\newblock PhD thesis, University of California, Irvine, 2000.
+
+\bibitem{UDP}
+J.~Postel, ``User datagram protocol,'' RFC 768, IETF, 1980.
+
+\bibitem{montesi16}
+F.~Montesi, ``Process-aware web programming with {J}olie,'' {\em SCP},
+  vol.~130, pp.~69--96, 2016.
+
+\bibitem{hunkeler08}
+U.~Hunkeler, H.~L. Truong, and A.~Stanford-Clark, ``{MQTT-S}—a
+  publish/subscribe protocol for wireless sensor networks,'' in {\em
+  {COMSWARE}}, pp.~791--798, IEEE, 2008.
+
+\bibitem{maurer16}
+N.~Maurer and M.~Wolfthal, {\em Netty in Action}.
+\newblock Manning Publications, 2016.
+
+\bibitem{ncoap}
+O.~Kleine, ``n{CoAP}.'' \url{https://github.com/okleine/nCoAP}.
+
+\bibitem{Guidi2006}
+C.~Guidi, R.~Lucchi, R.~Gorrieri, N.~Busi, and G.~Zavattaro, ``{SOCK}: a
+  calculus for service oriented computing,'' in {\em {ICSOC}}, pp.~327--338,
+  Springer, 2006.
+
+\bibitem{GuidiLMZ09}
+C.~Guidi, I.~Lanese, F.~Montesi, and G.~Zavattaro, ``Dynamic error handling in
+  service oriented applications,'' {\em Fundam. Inform.}, vol.~95, no.~1,
+  pp.~73--102, 2009.
+
+\bibitem{MontesiC11}
+F.~Montesi and M.~Carbone, ``Programming services with correlation sets,'' in
+  {\em {ICSOC}}, pp.~125--141, Springer, 2011.
+
+\bibitem{bpel}
+{O}{A}{S}{I}{S}, ``{W}eb {S}ervices {B}usiness {P}rocess {E}xecution
+  {L}anguage.'' \url{http://docs.oasis-open.org/wsbpel/2.0/wsbpel-v2.0.html}.
+
+\bibitem{60}
+``Smart{T}hings.'' \url{http://www.smartthings.com/}, 2016.
+
+\bibitem{jsonld}
+M.~Sporny, ``{JSON-LD{1.0}}.'' \url{https://www.w3.org/TR/json-ld/}.
+
+\bibitem{Merkel:2014:DLL:2600239.2600241}
+D.~Merkel, ``Docker: Lightweight linux containers for consistent development
+  and deployment,'' {\em Linux J.}, vol.~2014, Mar. 2014.
+
+\bibitem{Soppelsa:2017:NDC:3153103}
+F.~Soppelsa and C.~Kaewkasi, {\em Native Docker Clustering with Swarm}.
+\newblock Packt Publishing, 2017.
+
+\bibitem{wot.arch}
+``Web of {T}hings architecture.''
+  \url{https://w3c.github.io/wot/architecture/wot-architecture.html}, 2017.
+
+\bibitem{dominique2011web}
+G.~Dominique, ``A web of things application architecture-integrating the
+  real-world into the web,'' {\em Zurich, Diss. ETH}, no.~19891, pp.~10--12,
+  2011.
+
+\bibitem{corredor2014lightweight}
+I.~Corredor, E.~Metola, A.~M. Bernardos, P.~Tarr{\'\i}o, and J.~R. Casar, ``A
+  lightweight web of things open platform to facilitate context data management
+  and personalized healthcare services creation,'' {\em {IJERPH}}, vol.~11,
+  no.~5, pp.~4676--4713, 2014.
+
+\bibitem{61}
+``Meshlium.'' \url{http://www.libelium.com/products/meshlium/}, 2016.
+
+\bibitem{62}
+``Thinking things.'' \url{http://www.thinkingthings.telefonica.com/}, 2016.
+
+\bibitem{7811451}
+A.~B. Sulaeman, F.~A. Ekadiyanto, and R.~F. Sari, ``Performance evaluation of
+  {HTTP}-{CoAP} proxy for wireless sensor and actuator networks,'' in {\em
+  APWiMob}, pp.~68--73, IEEE, 2016.
+
+\bibitem{s150101217}
+A.~Ludovici and A.~Calveras, ``A proxy design to leverage the interconnection
+  of {CoAP} wireless sensor networks with web applications,'' {\em Sensors},
+  vol.~15, no.~1, pp.~1217--1244, 2015.
+
+\bibitem{7037719}
+E.~Mingozzi, G.~Tanganelli, and C.~Vallati, ``{CoAP} proxy virtualization for
+  the {W}eb of {T}hings,'' in {\em CloudCom}, pp.~577--582, {IEEE} Computer
+  Society, 2014.
+
+\bibitem{6827678}
+D.~Thangavel, X.~Ma, A.~Valera, H.~X. Tan, and C.~K.~Y. Tan, ``Performance
+  evaluation of {MQTT} and {CoAP} via a common middleware,'' in {\em ISSNIP},
+  pp.~1--6, {IEEE}, 2014.
+
+\bibitem{EplicseIoT}
+``The {Eclipse} for {IoT} {Project}.'' \url{https://iot.eclipse.org/}, 2017.
+
+\bibitem{7471373}
+M.~Ganzha, M.~Paprzycki, W.~Pawlowski, P.~Szmeja, and K.~Wasielewska,
+  ``Semantic technologies for the {IoT} - an inter-{IoT} perspective,'' in {\em
+  IoTDI}, pp.~271--276, {IEEE}, 2016.
+
+\bibitem{Zhiliang11}
+W.~Zhiliang, Y.~Yi, W.~Lu, and W.~Wei, ``A {SOA} based {IoT} communication
+  middleware,'' in {\em MEC}, pp.~2555--2558, IEEE, 2011.
+
+\bibitem{GabbrielliGGMM16}
+M.~Gabbrielli, S.~Giallorenzo, C.~Guidi, J.~Mauro, and F.~Montesi,
+  ``Self-reconfiguring microservices,'' in {\em TPFM}, vol.~9660 of {\em LNCS},
+  pp.~194--210, Springer, 2016.
+
+\bibitem{MelisPGC17}
+F.~Callegati, S.~Giallorenzo, A.~Melis, and M.~Prandini, ``Insider threats in
+  emerging mobility-as-a-service scenarios,'' in {\em {HICSS}}, {AIS}
+  Electronic Library (AISeL), 2017.
+
+\bibitem{SensorML}
+``The sensor{ML} project.'' \url{http://www.opengeospatial.org}, 2017.
+
+\bibitem{eugster03}
+P.~T. Eugster, P.~A. Felber, R.~Guerraoui, and A.-M. Kermarrec, ``The many
+  faces of publish/subscribe,'' {\em ACM computing surveys}, vol.~35, no.~2,
+  pp.~114--131, 2003.
+
+\end{thebibliography}

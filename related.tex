@@ -1,0 +1,77 @@
+In the literature there are many proposals for platforms, middlewares, smart
+gateways, and general systems, all aimed at solving the interoperability
+problem arising from the current ``babel'' of IoT technologies (protocols,
+formats, and languages). Without any claim of being complete, here we mention a
+few notable examples which are somehow related to the topic of the current paper.
+
+Recently the W3C started the Web of Things (WoT) Working Group~\cite{w3c17}. The
+aim of WoT is to define a standard stack of layered technologies, as well as
+software architectural styles and programming patterns, to uniform and simplify
+the creation of IoT applications. In this context, the W3C is working on a WoT
+Architecture~\cite{wot.arch}. The main concept of the architecture is the notion
+of ``servient'', a virtual entity that represents a physical IoT device.
+Servients provide technology-independent, standard APIs that developers can use
+to transparently operate in heterogeneous environments. Remarkably, both the
+WoT proposal and ours concern high-level
+abstractions for low-level access to devices provided via, e.g., HTTP, CoAP, and
+MQTT.\@ However, while we propose a dedicated language, they provide API
+specifications.
+%
+More in general, there are many proposals for the integration of WoT and IoT.\@
+For example~\cite{dominique2011web} and~\cite{corredor2014lightweight} define
+general platforms covering different layers of IoT, including an accessibility
+layer which integrates concepts like smart gateways and proxies to facilitate
+the connection of (smart) Things into the Internet infrastructure, using
+architectural principles based on REST.
+%
+Smart gateways and proxies are used in several industrial proposals to
+facilitate the development of applications. Common denominator of some of these
+proposals, e.g.,~\cite{60,61,62}, is the abstraction of low-level
+functionalities provided by embedded devices (e.g., connectivity and
+communication over low-level protocols like ZigBee, Z-Wave, Wi/IP/UPnP, etc.).
+Smart gateways are used also to translate (or integrate) CoAP into
+HTTP~\cite{7811451,s150101217,7037719} and to integrate both CoAP and MQTT by
+means of specific middlewares~\cite{6827678}. Eclipse IoT~\cite{EplicseIoT} is
+an IoT integration framework proposed by the Eclipse IoT Working Group. Aim of
+Eclipse IoT is to build an open IoT stack for Java, including the support for
+device-to-device and device-to-server protocols, as well as the provision of
+protocols, frameworks, and services for device management. There exist several
+ European projects, notably INTER-IoT~\cite{7471373} and
+symbIoTe~\cite{Gojmerac16}, that address the issue of interoperability in IoT
+and have produced several concrete proposals. Finally, a work close to ours
+is~\cite{Zhiliang11}, where a middleware converts IoT heterogeneous networks
+into a single homogeneous network.
+
+Although related to our aim in this paper, the cited proposals tackle the
+problem of IoT integration from a framework perspective: they provide chains of
+tools, each addressing a specific level of the integration stack. Differently,
+we extend a language specifically tailored for system integration and advanced
+flow manipulation, Jolie, to support integration of IoT devices. This offers a
+single linguistic domain to seamlessly integrate disparate low-level IoT devices
+and intermediate nodes (collectors, aggregators, gateways). Moreover, Jolie is
+already successfully used for building Cloud-based, microservice
+solutions~\cite{GabbrielliGGMM16,MelisPGC17}. This makes the language useful
+also for assembling advanced architectures for IoT, e.g., to handle real-time
+streaming and processing of data from many devices. The benefit, here, is that,
+while solutions based on frameworks require dedicated proficiencies on each of
+the included tools, Jolie programmers can directly work at any level of the IoT
+stack, without the need to acquire specific knowledge on the tools in a given
+framework.
+
+To conclude our revision of related work, we narrow our focus on language-based
+integration solutions for IoT. The work most related to ours is
+SensorML~\cite{SensorML}.
+%
+SensorML, abbreviation of Sensor Model Language, is a modeling
+language for the description of sensors and, more in general, of measurement
+processes. Some features modeled by the language are: discovery and
+geolocalization of sensors, processing of sensor observations, and
+functionalities to program sensors and to subscribe to sensor events.
+%
+While some traits of SensorML are common to our proposal, the scopes of the two
+languages sensibly differ. Indeed, while Jolie is a high-level language for
+programming generic architectures (spanning from Cloud-based microservices to
+low-level IoT integrators), SensorML just models IoT devices, their discovery,
+and the processing of sensor observations.
+
+%

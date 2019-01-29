@@ -1,0 +1,156 @@
+In this section we illustrate, via an example, the main elements of
+Jolie programs, highlighting their peculiarities for programming
+distributed systems.
+
+%As such, Jolie provides
+%some basic constructs which are useful in the IoT context even though,
+%as we discuss later, we need to add to the language some further  features in
+%order to obtain a real IoT programming framework.
+
+As already said, in Jolie, programs are divided into two
+parts: deployment and behavior.
+
+The deployment part of a Jolie program describes which \emph{ports} it
+uses for communicating with other programs. More
+precisely, \emph{input ports} describe how messages can reach a Jolie
+program, while \emph{output ports} describe how messages are sent from
+a Jolie program. Each port specifies the medium used for communication
+(with the keyword
+\code|Location|), the data protocol used (with the keyword
+\code|Protocol|), and the supported interface (with the keyword
+\code|Interfaces|). 
+
+Currently, Jolie supports TCP/IP sockets, Bluetooth L2CAP, Java RMI,
+and Unix local sockets as \code{Location}, and HTTP, JSON, XML,
+SOAP, SODEP (Jolie binary protocol) and their respective SSL versions
+as \code{Protocol}.
+
+Interfaces are used to enforce compliance among the nodes of a
+distributed application. Intuitively, in interfaces developers specify
+the names of the available functionalities and what data structures
+they accept and expect to send. In this way, just by having the
+interface of a server, one knows which functionalities the server
+provides, which data structures it accepts and which data structures
+it sends back. In Service-Oriented Programming functionalities are
+called operations and can be grouped in two main
+classes: \emph{One-way} operations, which allow one to receive a
+message\footnote{The dual operation of asynchronously sending a
+message is called \emph{notification}.},
+and \emph{Request-Response} operations, which allow one to receive a
+message and send back an answer\footnote{The dual operation of sending a
+message and waiting for an answer is called
+\emph{solicitResponse}.}.
+
+As an illustrative example, we consider a classic interaction between
+some edge devices and a collector node: the devices sense some
+temperature and send it to the collector.
+
+In Jolie, the behavior of the collector is implemented by the code below
+%
+\begin{lstlisting}
+main {
+  getTemperature( data );
+  ...
+}
+\end{lstlisting}
+%
+Following the above terminology, \code{getTemperature} is a
+one-way input operation, i.e., an input label that a device can use to
+call the collector, in this case to provide a temperature measurement.
+Here, one-way means that the communication is asynchronous, i.e., the
+device can continue without waiting for the collector to actually
+consume the delivered message. When consumed, the content of the
+message is assigned to variable \code{data}. The semicolon
+(\code{;}) indicates sequence, i.e., that the code before the
+semicolon needs to complete before the code following it could start.
+
+The behaviour above needs to be complemented by a deployment,
+detailing how the collector communicates with other devices.
+Such an information is defined within \emph{ports}, declarative
+constructs where programmers can specify:
+%(the list is not comprehensive):
+%
+\begin{description}
+  \item[Location:] the communication medium (e.g., TCP/IP, Bluetooth)
+  and address used to contact the device;
+  \item[Protocol:] the data format (e.g., HTTP, SOAP) and other optional settings, e.g., protocol-specific parameters;
+  \item[Interfaces:] a set of interfaces, each of which is a collection
+  of operation labels associated with the types of the exchanged messages. Each
+  operation can either be a \code{OneWay} or a
+  \code{RequestResponse}.
+%  , the latter being a synchronous exchange, where
+%  the invoker sends a message and waits for a response from the addressee node.
+\end{description}
+
+In the current example the collector contains an
+\code{inputPort} --- a port that defines an inbound
+connection --- called \code{CollectorPort1}. The port specifies that the
+collector accepts TCP/IP connections at URL
+\code{"socket://collector.net:8000"} on the \code{HTTP} data protocol.
+We also define the interface of the collector, called
+\code{TemperatureInterface}, with construct
+\code{interface}. Below we define the type of the message on operation
+\code{getTemperature} to be a \code{string}.
+
+\begin{lstlisting}[xleftmargin=1em]
+interface TemperatureInterface {
+  OneWay: getTemperature( string )
+}
+
+inputPort CollectorPort1 {
+  Location: "socket://collector.net:8000"
+  Protocol: HTTP
+  Interfaces: TemperatureInterface
+}
+\end{lstlisting}
+
+Interfaces are specifically thought to be shared between nodes to enforce
+compliance. In Jolie, both the sender and the receiver check whether ports
+support an invoked operation and if the content of the related message complies
+with the expected type defined in the interface. In this way, developers can
+formally agree on the interfaces of the nodes within their network, which is a
+prerequisite for and gives support to the advocated practice of API-driven
+development~\cite{Schon2017}.
+
+We conclude this section by considering an interesting case where Jolie would
+show its strengths: after an update of the IoT network in the example, the
+collector needs to be able to receive temperatures from both the pre-existing
+devices (which worked on TCP/IP over HTTP) and the new devices that rely on the
+CoAP protocol -- a renowned data protocol for IoT~\cite{coap}. As standard for
+CoAP, the devices communicate over the unreliable communication protocol UDP.
+
+Assuming the integration of CoAP and UDP in Jolie, which is one of the
+main contributions of the present paper, to let the collector interact
+with the new devices, it is sufficient to define an
+additional \code{inputPort} that supports
+\code{TemperatureInterface} and whose Location and Protocol are
+respectively an UDP location and the CoAP protocol. Concretely, besides port
+\code{Collector} we also define port \code{Collector2}.  Note that the
+behaviour of the program (specified in \code{main}) remains the
+same. For completeness, we report the whole code of the collector
+below.
+%
+
+\begin{lstlisting}[xleftmargin=1em,label=temperature_interface]
+interface TemperatureInterface {
+  OneWay: getTemperature( string )
+}
+
+inputPort CollectorPort1 {
+  Location: "socket://collector.net:8000"
+  Protocol: HTTP
+  Interfaces: TemperatureInterface
+}
+
+inputPort CollectorPort2 {
+  Location: "datagram://coap.me:5683"
+  Protocol: CoAP
+  Interfaces: TemperatureInterface
+}
+
+main {
+  getTemperature( data );
+  ...
+}
+\end{lstlisting}
+In the above listings is shown the Temperature Interface exposed both via HTTP and via CoAP.

@@ -1,0 +1,187 @@
+The \textit{Constrained Application Protocol}
+(CoAP)~\cite{coap,doi:10.17487/RFC7252} is a specialized web transfer protocol
+for constrained scenarios where nodes have low power and networks are lossy. The
+goal of CoAP is to import the widely adopted model of REST
+architectures~\cite{fielding00} into an IoT setting, that is, optimizing it for
+Machine-to-Machine applications. In particular, like HTTP,
+CoAP makes use of GET, PUT,
+POST, and DELETE methods.
+%
+Following the RFC~\cite{doi:10.17487/RFC7252}, CoAP is implemented on top of the
+UDP transport protocol~\cite{UDP}, with optional reliability. Indeed, CoAP
+provides two communication modalities: a reliable one, obtained by marking the
+message type as confirmable (CON), and an unreliable one, obtained by marking the
+message type as non confirmable (NON).
+
+As an example, we consider a scenario with a controller, programmed in 
+JIoT, that communicates with one of many thermostats 
+in a home automation scenario.
+Thermostats are accessible at the generic address~\code{"coap://localhost/##"} 
+where~\code{"##"}~is a two-digit number representing the identifier 
+of a specific device. 
+Each thermostat accepts two kinds of interactions: a GET request on 
+URI~\code{"coap://localhost/##/getTemperature"},
+that returns the current temperature, and a POST
+request on URI \code{"coap://localhost/##/setTemperature"}, 
+that sets the temperature of the HVAC system.
+
+We comment below \Cref{lst:coap_example}, where we report the code of a
+possible JIoT controller that interacts with a specific thermostat.
+
+\begin{figure}[t]
+\begin{lstlisting}[
+basicstyle=\footnotesize\ttfamily,
+label=lst:coap_example,
+caption=JIoT controller communicating over CoAP/UDP.]
+type getTmpType: void { .id: string }
+type setTmpType: int { .id: string }
+
+interface ThermostatInterface {
+ RequestResponse: getTmp( getTmpType )( int )
+ OneWay: setTmp( setTmpType )
+}
+
+outputPort Thermostat {
+ Location: "datagram://localhost:5683"
+ Protocol: coap {
+  .osc.getTmp << {
+   .messageCode = "GET",
+   .contentFormat = "text/plain",
+   .messageType = "CON",
+   .alias = "/%!{id}/getTemperature"
+  };
+  .osc.setTmp << {
+   .messageCode = "POST",
+   .messageType = "CON",
+   .alias = "/%!{id}/setTemperature"  
+  }
+ }
+ Interfaces: ThermostatInterface
+}
+
+main {
+ getTmp@Thermostat( { .id = "42" } )( temp );
+ if ( temp > 27 ) {
+  setTmp@Thermostat( 24 { .id = "42" } )
+ } else if ( temp < 15 ) {
+  setTmp@Thermostat( 22 { .id = "42" } )
+ }
+}
+\end{lstlisting}
+\end{figure}
+
+Our scenario includes two CoAP resources, referred to as
+~\code{"/getTemperature"} and \code{"/setTemperature"}. 
+We model them in JIoT at lines 4--7
+of \cref{lst:coap_example}, by defining the \code{interface}
+\code{ThermostatInterface}, which includes a
+\code{RequestResponse} operation \code{getTmp}, representing resource
+\code{"/getTemperature"}, and a \code{OneWay} operation
+\code{setTmp}, representing resource \code{"/setTemperature"}.
+%
+By default, we map operation names to resource names, hence in our example we
+would need resources named \code{"/getTmp"} and
+\code{"/setTmp"}, respectively. However one
+can override 
+this default by defining the coupling of resource names and operations
+as desired. This allows programmers to use interfaces as high level
+abstractions for interactions, 
+%the default mapping, defining the coupling of protocol-specific
+%concepts (here CoAP resources) and operations inside ports. In this way,
+%programmers can define interactions at the high level of abstraction using interfaces, 
+while the grounding to the specific case is done in the deployment.
+% 
+Here we purposefully choose to use operation names that differ from resource
+names to underline that the two concepts are related but loosely coupled.
+%
+On the one hand the coupling between the name of the resource and the operation can be seen 
+as a way of quickly binding actions exposed by the CoAP server with operations.
+On the other hand decoupling resource names and operations permits to handle
+more complex deployments where, for instance, a single operation responds for
+different resources.
+%
+At lines 9--25 we define an \code{outputPort} to interact with the
+\code{Thermostat}.
+%
+At line 10 we specify the \code{Location} of the thermostat. Recalling that
+the scheme of the resources of the thermostats is
+\code{"coap://localhost/##/..."}, we define the \code{Location} of
+the port using the UDP \code{"datagram://"} protocol, followed by the
+first part of the resource schema \code{"localhost"} and the UDP port on
+which it accepts requests. Here we assume thermostats to use CoAP standard UDP
+port, which is \code{"5683"}. Note that, in the \code{Location}, we do
+not define the address of a specific thermostat, e.g.,
+\code{"datagram://localhost:5683/42"}. On the contrary, we just specify
+the generic address to access thermostats in the system, while the specific
+binding will be done at runtime, thanks to the \code{.alias} parameter of
+the \code{coap} protocol, described later on.
+
+At line 11 we define \code{coap} to be the protocol used by the 
+\code{outputPort}. At lines 12--22 we specify some parameters of the
+\code{coap} protocol --- this matches the standard way in which Jolie defines
+parameters for \code{Protocol}s in ports.
+Here, we follow the methodology presented in~\cite{montesi16} for the
+implementation of the HTTP protocol in Jolie --- indeed CoAP adopts HTTP naming
+schema and resource interaction methods. In particular, we draw
+from~\cite{montesi16} the parameter prefix \code{.osc}, whose name is the
+acronym of ``operation-specific configuration'' and which is used for
+configuration parameters related to a specific operation.
+
+In the example, we define \code{.osc} parameters for both operations
+\code {getTmp} and \code{setTmp}.\@ At line 13 we specify that the CoAP verb
+used for operation \code{getTmp} is \code{"GET"}. At line 14 we define, using
+the \code{.contentFormat} parameter, that the encoding of the payload of the
+message in a binary format (\code{"text/plain"}). Other accepted values for
+the \code{.contentFormat} parameter are \code{"json"} and \code{"xml"}.
+Marshalling and un-marshalling is automatic and transparent to the programmer.
+This feature is enabled by the structure of Jolie variables, which are always
+tree-shaped, hence they can easily be translated into representations based on
+that shape. At line 15 we set the \code{.messageType} parameter to
+\code{"CON"}, that stands for confirmable. Accepted values for the
+\code{.messageType} parameter are confirmable and not confirmable. In the
+first case the sender will receive an acknowledgment message from the
+receiver, in the second case it will not. At line 16, following the practice
+introduced in~\cite{montesi16}, we specify that \code{getTmp} \code{alias}es a
+resource whose path concatenates a static part, given by the \code{Location},
+and the instantiation of the template \lstinline|"/%!{id}/getTemperature"|
+provided by protocol parameter \code{.alias}. The template is instantiated
+using values from the parameter of the operation invocation in the behavior,
+e.g., value \code{42} at line 28\footnote{In Jolie the dot \code{.} defines
+path traversals inside trees. Hence, the notation \code{\{.id = 42\}}
+indicates a tree with an empty root and a subnode called \code{id}, whose
+value is \code{42}.}. Hence, the interpretation of the declaration at line 16
+is that, when invoking operation \code{getTmp} at runtime, the element
+\code{id} of the invocation will be removed from the payload and used to form
+the address of the requested resource. The aliasing for operation
+\code{setTmp} (line 21) is similar to that of \code{getTmp}, while the
+operation uses verb \code{POST}. Since here the \code{.contentFormat}
+parameter is omitted, the default \code{"text/plain"} is used.
+
+To conclude, we briefly comment the runtime execution of the example, described
+in the behavior at lines 28--33. At line 28 the controller invokes operation
+\code{getTmp}. Being an outgoing \code{RequestResponse}, the
+invocation defines on which port to perform the request (\code{Thermostat})
+and presents two pairs of round brackets: the first contains the data for the
+request, the second points to the variable that will store the received
+response. Recalling the aliasing defined at line 16, at line 28 we define the
+value of element \code{id = 42}, thus the URI of the resource invoked at
+runtime is \code{"coap://localhost/42/getTemperature"}. Notably, in the
+example we hard-coded the \code{id} of the device, however in a more realistic
+setting the value of \code{id} would be retrieved dynamically, e.g., as an
+execution parameter, from a configuration file or from a database. Once
+received, the response from thermostat \code{42} is assigned to variable
+\code{temp}. The example concludes with a conditional in which, if the
+temperature is above \code{27} degrees (line 29), the thermostat is set to lower room
+temperature to \code{24} degrees, while, if the temperature lies below \code
+{15} degrees, the thermostat is set to raise the temperature to \code{22}
+degrees.
+
+Dually to \code{outputPort}s, \code{inputPort}s allow the programmer
+to specify inbound communications. The parameters described above are valid also
+for \code{inputPort}s, with the only difference that
+\code{messageType} works only for \code{RequestResponse}s, and
+specifies whether the communication of the reply is reliable or not. 
+%
+Note that, concerning the \code{.alias} parameter, the template is instantiated
+using the address of the incoming communication and the values are inserted
+among the elements of the payload.
