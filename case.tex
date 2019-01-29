@@ -1,50 +1,43 @@
 \begin{figure}[t]
   \centering
   \includegraphics[width=\textwidth]{case_study_overview.pdf}
-  \caption{Conceptual overview of the home automation case study.} 
+  \caption{Conceptual overview of the home automation case study.}
   \label{fig:case_study_overview} \end{figure}
 
 In this section we detail the programming of a JIoT system, focusing on a home
-automation case study. We remark that the techniques used in the case study
-are not specific of home automation, and can be used in any setting where many
-Things based on heterogeneous technologies need to be orchestrated. Notably,
-new Things can enter the system at any time. The whole source code of the
-system is released under the GPL license\footnote{\url{https://tinyurl.com/ya3vhxyt}}.
-We report in \cref{fig:case_study_overview} a schematic overview of the
-overall structure of the case study, where Cloud nodes and mid-tier
-controllers (represented by the ``JIoT Orchestration'' element in
+automation case study. We remark that the techniques used in the case study are
+not specific of home automation, and can be used in any setting where many
+Things based on heterogeneous technologies need to be orchestrated. Notably, new
+Things can enter the system at any time. The whole source code of the system is
+released under the GPL
+license\footnote{\url{https://bitbucket.org/spacesresearchgroup/microservices-for-home-automation}}.
+We report in \cref{fig:case_study_overview} a schematic overview of the overall
+structure of the case study, where Cloud nodes and mid-tier controllers
+(represented by the ``JIoT Orchestration'' element in
 \cref{fig:case_study_overview}) are programmed in JIoT and orchestrate the
 behavior of a number of heterogeneous devices (whose low-level programming is
-omitted here):
-\begin{itemize}
-  \item \emph{Philips Hue Hub}: a hub to control the Philips Hue smart home devices;
-  \item \emph{Philips Hue White Lamps}: connected to the hub above;
-  \item \emph{Samsung SmartThings Hub}: a hub to control devices following 
-  the SmartThings specification~\cite{60};
-  \item \emph{Samsung SmartThings Motion Sensor}: connected to the hub above 
-  and used as a presence sensor;
-  \item \emph{Arduino Uno}: a general-purpose microcontroller;
-  \item \emph{Adafruit GA1A12S202 Analog Light Sensor}: connected to the 
-  Arduino above;
-  \item \emph{Adafruit DHT22 Temperature Sensor}: also connected to the 
-  Arduino above;
-  \item \emph{ESP8266}: a microcontroller to manage a pre-existing 
-  thermostat.
-\end{itemize}
-This case study has been selected since it involves a heterogeneous
-sample of current IoT solutions, to give an account on how JIoT can
-manage them.  Concretely, the case study combines commercial
-solutions---e.g., the Philips Hue Hub and the Hue White Lamps system
-where the Lamps are controlled by the Hub---with custom ones---these
-span from sensors directly connected to a board, as it happens for the
-Adafruit DHT22 temperature sensor, to solutions that integrate a
-pre-existing hardware, like the ESP8266 that manages a pre-existing
-thermostat. As illustrated in \cref{fig:case_study_overview}, this
-heterogeneity of devices provides for a comprehensive scenario where
-we need JIoT programs that use different application and transport
-protocols. In particular, Philips and Samsung Hubs communicate with
-the orchestrator over HTTP/TCP, the Arduino over MQTT/TCP, and the
-ESP8266 over CoAP/UDP.
+omitted here): \begin{itemize} \item \emph{Philips Hue Hub}: a hub to control
+the Philips Hue smart home devices; \item \emph{Philips Hue White Lamps}:
+connected to the hub above; \item \emph{Samsung SmartThings Hub}: a hub to
+control devices following  the SmartThings specification~\cite{60}; \item
+\emph{Samsung SmartThings Motion Sensor}: connected to the hub above  and used
+as a presence sensor; \item \emph{Arduino Uno}: a general-purpose
+microcontroller; \item \emph{Adafruit GA1A12S202 Analog Light Sensor}: connected
+to the  Arduino above; \item \emph{Adafruit DHT22 Temperature Sensor}: also
+connected to the  Arduino above; \item \emph{ESP8266}: a microcontroller to
+manage a pre-existing  thermostat. \end{itemize} This case study has been
+selected since it involves a heterogeneous sample of current IoT solutions, to
+give an account on how JIoT can manage them.  Concretely, the case study
+combines commercial solutions---e.g., the Philips Hue Hub and the Hue White
+Lamps system where the Lamps are controlled by the Hub---with custom
+ones---these span from sensors directly connected to a board, as it happens for
+the Adafruit DHT22 temperature sensor, to solutions that integrate a
+pre-existing hardware, like the ESP8266 that manages a pre-existing thermostat.
+As illustrated in \cref{fig:case_study_overview}, this heterogeneity of devices
+provides for a comprehensive scenario where we need JIoT programs that use
+different application and transport protocols. In particular, Philips and
+Samsung Hubs communicate with the orchestrator over HTTP/TCP, the Arduino over
+MQTT/TCP, and the ESP8266 over CoAP/UDP.
 
 In the use case we build a simple logic providing two functionalities:
 lighting and temperature system control. The lighting system turns on the
@@ -180,7 +173,7 @@ registration, it sends the information retrieved from the TD, enriched with two
 additional pieces of information: the address where the Thing can be
 contacted---i.e., the \code{Driver} location---and the identifier of the
 user to which the Thing belongs. Once registered, the \code{Driver} acts as
-a forwarder between the \code{LogicEngine} and the Thing. 
+a forwarder between the \code{LogicEngine} and the Thing.
 
 The \code{LogicEngine} runs on the Cloud and manages a number of sensors and
 actuators. More precisely the \code{LogicEngine} has one running session for
@@ -207,26 +200,26 @@ outputPort Driver {
 }
 
 define getTemperature {
- sum = 0 ; 
+ sum = 0 ;
  n = 0 ;
  for ( device in devices ) {
-  if( device.<@\textcolor{black}{type}@> == "sensor" && 
+  if( device.<@\textcolor{black}{type}@> == "sensor" &&
     is_defined( device.properties.temperature ) ) {
-   Driver.location = device.driverLocation ; 
+   Driver.location = device.driverLocation ;
    request.operationName = "getTemperature" ;
    engineRequest@Driver( request )( response ) ;
-   sum = sum + response.deviceResponse ; 
-   n++ 
+   sum = sum + response.deviceResponse ;
+   n++
   }
- } ; 
+ } ;
  if( n!=0 ) {
   temperature = sum / n
- } 
+ }
 }
 \end{lstlisting}
 \end{figure}
 %
-Briefly, procedure \code{getTemperature}: 
+Briefly, procedure \code{getTemperature}:
 
 \begin{itemize}
   \item scans the \lstinline{devices} structure (line 13) containing all
@@ -256,7 +249,7 @@ the one to check the presence of people at home are similar to the one in
 We report in \cref{lst:logic_example_set} one of the procedures managing
 actuators, specifically the one used to set the temperature. The main
 difference with respect to the logic in \cref{lst:logic_example_get} is that
-procedure \code{setTemperature}: 
+procedure \code{setTemperature}:
 
 \begin{itemize}
   \item selects the \lstinline{devices} whose {\small \texttt{type}} is
@@ -282,14 +275,14 @@ label=lst:logic_example_set,
 caption=\code{LogicEngine} setTemperature procedure.]
 define setTemperature {
  for ( device in devices ) {
-  if( device.<@\textcolor{black}{type}@> == "actuator" && 
+  if( device.<@\textcolor{black}{type}@> == "actuator" &&
     is_defined( device.properties.temperature ) ) {
    Driver.location = device.location ;
    request.operationName = "setTemperature" ;
    request.deviceRequest = comfortTemperature ;
    engineRequest@Driver( request )( response )
   }
- } 
+ }
 }
 \end{lstlisting}
 \end{figure}
@@ -318,7 +311,7 @@ report below the Dockerfile used to deploy the \code{LogicEngine}.
 <@\textcolor{red}{RUN}@>  java -jar jiot.jar -jh /usr/lib/jolie/ -jl /usr/bin/
 <@\textcolor{red}{ENV}@> JOLIE_HOME /usr/local/lib/jolie
 
-<@\textcolor{red}{ADD}@> logic_engine.ol /home/. 
+<@\textcolor{red}{ADD}@> logic_engine.ol /home/.
 <@\textcolor{red}{WORKDIR}@> /home
 <@\textcolor{red}{RUN}@> jolie logic_engine.ol
 \end{lstlisting}
@@ -328,4 +321,4 @@ lightweight Linux Alpine distribution with OpenJDK 8 pre-installed. At lines
 3--4 we install the JIoT fork interpreter and we set the environmental
 variable \code{JOLIE_HOME} to point to the location of the installed interpreter. Finally, at lines 6--7 we add the source code of the
 \code{LogicEngine} in the home directory of the image.
-Finally at line 8 we start the execution of the \code{LogicEngine}. 
+Finally at line 8 we start the execution of the \code{LogicEngine}.
