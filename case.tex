@@ -5,39 +5,55 @@
   \label{fig:case_study_overview} \end{figure}
 
 In this section we detail the programming of a JIoT system, focusing on a home
-automation case study. We remark that the techniques used in the case study are
-not specific of home automation, and can be used in any setting where many
-Things based on heterogeneous technologies need to be orchestrated. Notably, new
-Things can enter the system at any time. The whole source code of the system is
-released under the GPL
-license\footnote{\url{https://bitbucket.org/spacesresearchgroup/microservices-for-home-automation}}.
-We report in \cref{fig:case_study_overview} a schematic overview of the overall
+automation case study. We remark that the techniques used in the case study
+are not specific of home automation, and can be used in any setting where many
+Things based on heterogeneous technologies need to be orchestrated. Notably,
+new Things can enter the system at any time. The whole source code of the
+system is released under the GPL 2.1
+license and available at \cite{jiot}. We
+report in \cref{fig:case_study_overview} a schematic overview of the overall
 structure of the case study, where Cloud nodes and mid-tier controllers
 (represented by the ``JIoT Orchestration'' element in
 \cref{fig:case_study_overview}) are programmed in JIoT and orchestrate the
 behavior of a number of heterogeneous devices (whose low-level programming is
-omitted here): \begin{itemize} \item \emph{Philips Hue Hub}: a hub to control
-the Philips Hue smart home devices; \item \emph{Philips Hue White Lamps}:
-connected to the hub above; \item \emph{Samsung SmartThings Hub}: a hub to
-control devices following  the SmartThings specification~\cite{60}; \item
-\emph{Samsung SmartThings Motion Sensor}: connected to the hub above  and used
-as a presence sensor; \item \emph{Arduino Uno}: a general-purpose
-microcontroller; \item \emph{Adafruit GA1A12S202 Analog Light Sensor}: connected
-to the  Arduino above; \item \emph{Adafruit DHT22 Temperature Sensor}: also
-connected to the  Arduino above; \item \emph{ESP8266}: a microcontroller to
-manage a pre-existing  thermostat. \end{itemize} This case study has been
-selected since it involves a heterogeneous sample of current IoT solutions, to
-give an account on how JIoT can manage them.  Concretely, the case study
-combines commercial solutions---e.g., the Philips Hue Hub and the Hue White
-Lamps system where the Lamps are controlled by the Hub---with custom
-ones---these span from sensors directly connected to a board, as it happens for
-the Adafruit DHT22 temperature sensor, to solutions that integrate a
-pre-existing hardware, like the ESP8266 that manages a pre-existing thermostat.
-As illustrated in \cref{fig:case_study_overview}, this heterogeneity of devices
-provides for a comprehensive scenario where we need JIoT programs that use
-different application and transport protocols. In particular, Philips and
-Samsung Hubs communicate with the orchestrator over HTTP/TCP, the Arduino over
-MQTT/TCP, and the ESP8266 over CoAP/UDP.
+omitted here): 
+
+\begin{itemize} 
+
+\item \emph{Philips Hue Hub}: a hub to control the Philips Hue smart home
+devices;
+
+\item \emph{Philips Hue White Lamps}: connected to the hub above; \item
+\emph{Samsung SmartThings Hub}: a hub to control devices following  the
+SmartThings specification~\cite{60};
+
+\item \emph{Samsung SmartThings Motion Sensor}: connected to the hub above and
+used as a presence sensor;
+
+\item \emph{Arduino Uno}: a general-purpose microcontroller;
+
+\item \emph{Adafruit GA1A12S202 Analog Light Sensor}: connected to the Arduino
+above;
+
+\item \emph{Adafruit DHT22 Temperature Sensor}: also connected to the Arduino
+above;
+
+\item \emph{ESP8266}: a microcontroller to manage a pre-existing  thermostat.
+
+\end{itemize}
+
+This case study has been selected since it involves a heterogeneous sample of
+current IoT solutions, to give an account on how JIoT can manage them.
+Concretely, the case study combines commercial solutions---e.g., the Philips
+Hue Hub and the Hue White Lamps system where the Lamps are controlled by the
+Hub---with custom ones---these span from sensors directly connected to a
+board, as it happens for the Adafruit DHT22 temperature sensor, to solutions
+that integrate a pre-existing hardware, like the ESP8266 that manages a
+pre-existing thermostat. As illustrated in \cref{fig:case_study_overview},
+this heterogeneity of devices provides for a comprehensive scenario where we
+need JIoT programs that use different application and transport protocols. In
+particular, Philips and Samsung Hubs communicate with the orchestrator over
+HTTP/TCP, the Arduino over MQTT/TCP, and the ESP8266 over CoAP/UDP.
 
 In the use case we build a simple logic providing two functionalities:
 lighting and temperature system control. The lighting system turns on the

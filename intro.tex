@@ -41,7 +41,7 @@ particular, we rely on those abstractions provided by Jolie that \emph{i}) let
 different communication protocols seamlessly coexist and interoperate within
 the same program and \emph{ii}) let programmers dynamically choose which
 communication stack should be used for any given communication.
-
+%
 Concretely, we fork the Jolie interpreter---written in Java---into a prototype
 called JIoT~\cite{jiot}, standing for ``Jolie for IoT''.
 %
@@ -51,7 +51,24 @@ representation formats (such as JSON, XML, etc.) of the message payload, as in
 the case of HTTP and CoAP, JIoT, like Jolie, can automatically marshal and un-marshal data
 as required.
 
-\subsection{Approach Overview}
+We structure our presentation as follows. We overview in \cref{sec:approach}
+our approach and summarize our contribution in \cref{sec:contribution}. Then,
+we discuss the main challenges we faced in our implementation in
+\cref{sec:challenges}, we present how a programmer can use CoAP/UDP
+(\cref{sub:coap}) and MQTT (\cref{sub:mqtt}) in JIoT, and we detail our
+implementation in \cref{sub:implementation}. We describe, in \cref{sub:case},
+a scenario on Cloud-based home automation where a JIoT
+architecture coordinates heterogeneous edge devices. Finally, we position our
+contribution with respect to related work in \cref{sec:related} and we draw
+final remarks in \cref{conclusion}.
+
+JIoT is available at~\cite{jiot}, released under the GPL 2.1 license. The code
+snippets reported in this paper are based on version 1.2 of JIoT. The
+integration of JIoT into the official code-base of the Jolie language is
+ongoing work.
+
+\section{Approach Overview}
+\label{sec:approach}
 
 Without proper language abstractions, guaranteeing interoperability among
 protocols belonging to different technology stacks is highly complex. The problem is
@@ -103,7 +120,8 @@ defined within \emph{ports}. For instance, the port for receiving (denoted with
 keyword \code{inputPort}) HTTP measurements can be defined as follows:
 %
 \newline
-\begin{lstlisting}[numbers=left,basicstyle=\ttfamily\footnotesize]
+\begin{lstlisting}[numbers=left,basicstyle=\ttfamily\footnotesize,caption=Example of interface
+and input port in Jolie.]
 interface TemperatureInterface {
  OneWay: receiveTemperature( string )
 }
@@ -207,8 +225,8 @@ sockets, Bluetooth L2CAP, Java RMI, and Unix local sockets) and data protocols
 (HTTP, JSON-RPC, XML-RPC, SOAP and their respective SSL versions) from this
 area.
 
-\subsection{Contribution}
-
+\section{Contribution}
+\label{sec:contribution}
 To substantiate the effectiveness of our language-based approach to IoT
 integration, we add to Jolie support for the main communication stacks used in the
 IoT setting. Concretely, the added contribution of JIoT with respect to Jolie
