@@ -104,9 +104,9 @@ main {
 }
 \end{lstlisting}
 %
-Above, Line 3 contains a reception statement. 
+Above, Line 3 contains a reception statement.
 Receptions in Jolie indicate a
-point where the program waits to receive a message. 
+point where the program waits to receive a message.
 In this case, the collector
 waits to receive a temperature measurement on \emph{operation}
 \code{receiveTemperature} (an operation in Jolie is an abstraction for
@@ -151,7 +151,7 @@ whole code of the collector becomes:
 %
 \begin{lstlisting}[%
   basicstyle=\footnotesize\ttfamily,
-  label=temperature_interface, 
+  label=temperature_interface,
   caption=Code of the Collector Example.]
 interface TemperatureInterface {
  OneWay: receiveTemperature( string )
@@ -184,7 +184,7 @@ operation can take measurements from both the \code{inputPort}s.
 For instance, if communication over \code{Collector2} fails, port
 \code{Collector1} can still receive data.
 %
-Programmers can also specify elaborations that depend on the used technologies, 
+Programmers can also specify elaborations that depend on the used technologies,
 by using different operations in different ports.
 Jolie supports both inbound and outbound
 communications, the latter declared with \code{outputPort}s, whose structure
@@ -207,7 +207,7 @@ capture the well-known pattern of request-response
 interactions~\cite{req-rep}). Dually, inbound \code{OneWay} communications wait
 for a message, while \code{RequestResponse} communications wait for a message
 and send back a reply.
- 
+
 %
 Jolie supports many communication media (via keyword
 \code{Location}) and data protocols (via keyword \code{Protocol}) in a simple,
@@ -247,20 +247,20 @@ However, both these assumptions fail when considering the two IoT technologies
 we integrate:
 
 \begin{itemize}
-  \item CoAP communications can be unreliable since they are based on UDP
-connectionless datagrams. CoAP provides options for reliable communications,
-however these are usually disabled in an IoT setting, since battery and
-bandwidth preservation is important;
+ \item CoAP communications can be unreliable since they are based on UDP
+       connectionless datagrams. CoAP provides options for reliable communications,
+       however these are usually disabled in an IoT setting, since battery and
+       bandwidth preservation is important;
 
-\item MQTT communications are based on the publish-subscribe paradigm, which
-contrasts with the point-to-point communication found in Jolie primitives.
-Hence, we need to define a mapping of the general abstractions of the Jolie
-language onto the publish-subscribe paradigm, balancing two factors: \emph{i})
-preserving the simplicity of use of the point-to-point communication style and
-\emph{ii}) capturing the typical publish-subscribe flow of communications. Such
-a mapping is particularly challenging in the case of request-response
-communications. Remarkably, the mapping that we present in this work is general
-and could be used also in other contexts.
+ \item MQTT communications are based on the publish-subscribe paradigm, which
+       contrasts with the point-to-point communication found in Jolie primitives.
+       Hence, we need to define a mapping of the general abstractions of the Jolie
+       language onto the publish-subscribe paradigm, balancing two factors: \emph{i})
+       preserving the simplicity of use of the point-to-point communication style and
+       \emph{ii}) capturing the typical publish-subscribe flow of communications. Such
+       a mapping is particularly challenging in the case of request-response
+       communications. Remarkably, the mapping that we present in this work is general
+       and could be used also in other contexts.
 \end{itemize}
 
 This paper integrates, revises, and extends material
@@ -269,29 +269,29 @@ technical details on the proposed language-based approach to IoT integration.
 Main extensions comprise:
 
 \begin{itemize}
-	\item advanced technical details on our implementation (Section~\ref{sub:implementation}) including:
-	
-	\begin{itemize}
-	 	\item a general account on how media and protocols are separated from the
-	 	Jolie interpreter and how they can be developed as independent modules;
-	
-		\item extensive details on the implementation of UDP, CoAP, and MQTT
-		protocols;
-	
-	 \end{itemize}
- 	
- 	\item a comprehensive case study on a home automation scenario (Section~\ref{sub:case}) where we
- 	consider:
+ \item advanced technical details on our implementation (Section~\ref{sub:implementation}) including:
 
- 	\begin{itemize}
- 		
- 		\item local, cross-layer communication among edge devices and
- 		mid-tier controllers;
+       \begin{itemize}
+        \item a general account on how media and protocols are separated from the
+              Jolie interpreter and how they can be developed as independent modules;
 
- 		\item remote, cross-layer interactions among Cloud nodes and mid-tier
- 		controllers.
+        \item extensive details on the implementation of UDP, CoAP, and MQTT
+              protocols;
 
- 	\end{itemize}
+       \end{itemize}
+
+ \item a comprehensive case study on a home automation scenario (Section~\ref{sub:case}) where we
+       consider:
+
+       \begin{itemize}
+
+        \item local, cross-layer communication among edge devices and
+              mid-tier controllers;
+
+        \item remote, cross-layer interactions among Cloud nodes and mid-tier
+              controllers.
+
+       \end{itemize}
 
 \end{itemize}
 %
