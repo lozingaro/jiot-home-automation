@@ -29,6 +29,8 @@ represented as in \cref{fig:pub_sub_encoding_one_way} where:
 Typical publish/subscribe interaction pattern.}
 \end{figure}
 
+More generally, messages published on a topic are forwarded to all current subscribers for the topic.
+
 On top of the basic mechanism of publish/subscribe, MQTT defines three levels of
 quality of service (QoS) for the delivery of each message published by a
 publisher. QoS levels determine whether messages can be lost and/or duplicated.
