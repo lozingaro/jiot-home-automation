@@ -2,12 +2,11 @@ The Internet of Things (IoT) advocates for multi-layered software platforms,
 each adopting its own media protocols and data
 formats~\cite{GubbiBMP13,Atzori20102787,7123563}.
 %
-The problem of integrating layers of the same IoT platform, as well as
-different IoT vertical solutions, involves many levels of the communication
-stack, spanning from link-layer communication technologies, such as ZigBee and
-WiFi, to application-layer protocols like HTTP,
-CoAP~\cite{coap,doi:10.17487/RFC7252}, and MQTT~\cite{mqtt,mqtt-v3.1.1},
-reaching the top-most layers of data-format
+The problem of integrating layers of the same IoT platform, as well as different
+IoT vertical solutions, involves many levels of the communication stack,
+spanning from link-layer communication technologies, such as ZigBee and WiFi, to
+application-layer protocols like HTTP, CoAP~\cite{coap,doi:10.17487/RFC7252},
+and MQTT~\cite{mqtt,mqtt-v3.1.1}, reaching the top-most layers of data-format
 integration~\cite{Milenkovic:2015:CII:2843962.2822643}.
 
 Technology-wise, architects of IoT platforms can choose between two approaches
@@ -15,21 +14,20 @@ at odds. The first approach favors optimal in-layer communications, i.e.,
 choosing media protocols and data formats best suited for the interactions
 happening among homogeneous elements, e.g., edge devices (connectionless
 protocols and binary data formats~\cite{7123563}), mid-tier controllers
-(gateways and aggregators on the RESTful stack~\cite{richardson2008restful}),
-or Cloud nodes (scalable publish-subscribe message
-queues~\cite{garg2013apache}). Following this first approach
-is optimal for in-layer communication. However, at the cross-layer level, the heterogeneity
-and possible incompatibility of the chosen standards make enforcing integrity
-within the IoT system complex and the resulting integration fragile. The second architectural approach
-favors cross-layer consistency, enforcing a unique communication stack over a
-single IoT platform. Here cross-layer integration is simpler thanks to the
-adoption of a single medium and data format. However such enforced uniformity is
-the main cause of the phenomenon known as ``IoT
-island''~\cite{Soursos16,Gojmerac16}, where IoT platforms take the shape of
-vertical solutions that provide little support for collaboration and
-integration with each other. How to overcome this limitation is currently a hot
-topic, tackled also by ongoing EU projects, e.g., symbIoTe~\cite{Gojmerac16}
-and bIoTope~\cite{biotope}.
+(gateways and aggregators on the RESTful stack~\cite{richardson2008restful}), or
+Cloud nodes (scalable publish-subscribe message queues~\cite{garg2013apache}).
+Following this first approach is optimal for in-layer communication. However, at
+the cross-layer level, the heterogeneity and possible incompatibility of the
+chosen standards make enforcing integrity within the IoT system complex and the
+resulting integration fragile. The second architectural approach favors
+cross-layer consistency, enforcing a unique communication stack over a single
+IoT platform. Here cross-layer integration is simpler thanks to the adoption of
+a single medium and data format. However such enforced uniformity is the main
+cause of the phenomenon known as ``IoT island''~\cite{Soursos16,Gojmerac16},
+where IoT platforms take the shape of vertical solutions that provide little
+support for collaboration and integration with each other. How to overcome this
+limitation is currently a hot topic, tackled also by ongoing EU projects, e.g.,
+symbIoTe~\cite{Gojmerac16} and bIoTope~\cite{biotope}.
 
 In this paper we tackle the problem of IoT integration (both cross-layer and
 cross-platform) following a language-based approach focused on integration at
@@ -38,34 +36,36 @@ not start from scratch, but we leverage the work done in the area of
 Service-Oriented Architectures (SOAs)~\cite{Erl07} and we build on the Jolie
 programming language~\cite{MONTESI200719,MGZ07,MontesiGZ14,jolie-lang}. In
 particular, we rely on those abstractions provided by Jolie that \emph{i}) let
-different communication protocols seamlessly coexist and interoperate within
-the same program and \emph{ii}) let programmers dynamically choose which
+different communication protocols seamlessly coexist and interoperate within the
+same program and \emph{ii}) let programmers dynamically choose which
 communication stack should be used for any given communication.
 %
 Concretely, we fork the Jolie interpreter---written in Java---into a prototype
 called JIoT~\cite{jiot}, standing for ``Jolie for IoT''.
 %
-JIoT supports all the protocols already supported by the Jolie interpreter (TCP at the transport level, and protocols such as SOAP, RMI and HTTP at the application level), while adding the application-level protocols for IoT, namely CoAP (and, as a consequence, UDP at the transport level) and MQTT.
-Notably, when the application protocol supports different
-representation formats (such as JSON, XML, etc.) of the message payload, as in
-the case of HTTP and CoAP, JIoT, like Jolie, can automatically marshal and un-marshal data
-as required.
+JIoT supports all the protocols already supported by the Jolie interpreter (TCP
+at the transport level, and protocols such as SOAP, RMI and HTTP at the
+application level), while adding the application-level protocols for IoT, namely
+CoAP (and, as a consequence, UDP at the transport level) and MQTT. Notably, when
+the application protocol supports different representation formats (such as
+JSON, XML, etc.) of the message payload, as in the case of HTTP and CoAP, JIoT,
+like Jolie, can automatically marshal and un-marshal data as required.
 
-We structure our presentation as follows. We overview in \cref{sec:approach}
-our approach and summarize our contribution in \cref{sec:contribution}. Then,
-we discuss the main challenges we faced in our development in
+We structure our presentation as follows. We overview in \cref{sec:approach} our
+approach and summarize our contribution in \cref{sec:contribution}. Then, we
+discuss the main challenges we faced in our development in
 \cref{sec:challenges}, we present how a programmer can use CoAP/UDP
 (\cref{sub:coap}) and MQTT (\cref{sub:mqtt}) in JIoT, and we detail our
-implementation in \cref{sub:implementation}. We describe, in \cref{sub:case},
-a scenario on Cloud-based home automation where a JIoT architecture
-coordinates heterogeneous edge devices. Finally, we position our contribution
-with respect to related work in \cref{sec:related} and we draw final remarks
-in \cref{conclusion}.
+implementation in \cref{sub:implementation}. We describe, in \cref{sub:case}, a
+scenario on Cloud-based home automation where a JIoT architecture coordinates
+heterogeneous edge devices. Finally, we position our contribution with respect
+to related work in \cref{sec:related} and we draw final remarks in
+\cref{conclusion}.
 
-JIoT is available at~\cite{jiot}, released under the LGPL v2.1 license. The
-code snippets reported in this paper are based on version 1.2 of JIoT. The
-integration of JIoT into the official code-base of the Jolie language is
-ongoing work.
+JIoT is available at~\cite{jiot}, released under the LGPL v2.1 license. The code
+snippets reported in this paper are based on version 1.2 of JIoT. The
+integration of JIoT into the official code-base of the Jolie language is ongoing
+work.
 
 \section{Approach Overview}
 \label{sec:approach}
@@ -85,8 +85,8 @@ where we want to integrate two islands of IoT devices, both collecting
 temperature data, but relying on different communication stacks, namely HTTP
 over TCP and CoAP over UDP.
 %
-The end goal is to program a collector which receives and aggregates
-temperature measurements from both islands.
+The end goal is to program a collector which receives and aggregates temperature
+measurements from both islands.
 
 Following the structure of Jolie programs, the collector programmed in JIoT is
 composed of two parts: a \emph{behavior}, specifying the logic of the
@@ -95,7 +95,8 @@ communication is performed. This separation of concerns is fundamental to let
 programmers easily change which communication stack to use, preserving the same
 logic for the elaboration.
 
-As an example of program behavior, let us consider the code below, where \lstinline{main} is the entry point of execution of Jolie programs.
+As an example of program behavior, let us consider the code below, where
+\lstinline{main} is the entry point of execution of Jolie programs.
 %
 \begin{lstlisting}[numbers=left,basicstyle=\footnotesize\ttfamily]
 main {
@@ -105,23 +106,22 @@ main {
 }
 \end{lstlisting}
 %
-Above, line 3 contains a reception statement.
-Receptions in Jolie indicate a
-point where the program waits to receive a message.
-In this case, the collector
+Above, line 3 contains a reception statement. Receptions in Jolie indicate a
+point where the program waits to receive a message. In this case, the collector
 waits to receive a temperature measurement on \emph{operation}
 \code{receiveTemperature} (an operation in Jolie is an abstraction for
-technology-specific concepts such as channels, resources, URLs,
-\dots). Upon reception, it stores the retrieved value in variable \code{data}.
+technology-specific concepts such as channels, resources, URLs, \dots). Upon
+reception, it stores the retrieved value in variable \code{data}.
 %
-Besides the logic of computation of the collector, we also need to specify the deployment, i.e., on
-which technologies the communication happens; in the example above, how the
-collector receives messages from other devices. In Jolie this information is
-defined within \emph{ports}. For example, the port to receive (denoted with
-keyword \code{inputPort}) HTTP measurements can be defined as in \cref{lst:ex_port}.
+Besides the logic of computation of the collector, we also need to specify the
+deployment, i.e., on which technologies the communication happens; in the
+example above, how the collector receives messages from other devices. In Jolie
+this information is defined within \emph{ports}. For example, the port to
+receive (denoted with keyword \code{inputPort}) HTTP measurements can be defined
+as in \cref{lst:ex_port}.
 %
 \begin{figure}
-\begin{lstlisting}[numbers=left,basicstyle=\ttfamily\footnotesize,caption=Example of interface
+ \begin{lstlisting}[numbers=left,basicstyle=\ttfamily\footnotesize,caption=Example of interface
 and input port in Jolie.,label=lst:ex_port]
 interface TemperatureInterface {
  OneWay: receiveTemperature( string )
@@ -137,17 +137,21 @@ inputPort CollectorPort1 {
 %
 Port \code{CollectorPort1} specifies that the collector expects inbound
 communications via \code{Protocol} \code{http} using a TCP/IP socket receiving
-at URL \code{"localhost"} on TCP port \code{8000}. A port exposes a set of operations, collected within a set of \code{Interfaces}. In the example, the input port \code{CollectorPort1} declares to expose interface \code{TemperatureInterface}, which is defined at lines 1--3 of Listing of \code{interface} is declared at lines 1--3 of \cref{lst:ex_port}. The interface declares the operation
-\code{receiveTemperature}, including the type of expected data
-(\code{string}), as a \code{OneWay} operation, namely an asynchronous
+at URL \code{"localhost"} on TCP port \code{8000}. A port exposes a set of
+operations, collected within a set of \code{Interfaces}. In the example, the
+input port \code{CollectorPort1} declares to expose interface
+\code{TemperatureInterface}, which is defined at lines 1--3 of Listing of
+\code{interface} is declared at lines 1--3 of \cref{lst:ex_port}. The interface
+declares the operation \code{receiveTemperature}, including the type of expected
+data (\code{string}), as a \code{OneWay} operation, namely an asynchronous
 communication that does not require any reply from the collector (except the
 acknowledgment automatically provided by the TCP implementation).
 
 Thanks to port \code{CollectorPort1}, the collector can receive data from the
 HTTP island. To integrate the second island, we just need to define an
 additional port, similar to \code{CollectorPort1}, except for using UDP/IP
-datagrams at the transport layer and CoAP~\cite{doi:10.17487/RFC7252,coap} at the application layer. Hence, the
-whole code of the collector becomes:
+datagrams at the transport layer and CoAP~\cite{doi:10.17487/RFC7252,coap} at
+the application layer. Hence, the whole code of the collector becomes:
 %
 \begin{lstlisting}[%
   basicstyle=\footnotesize\ttfamily,
@@ -178,89 +182,92 @@ main {
 %
 The example above highlights how, using the proposed language abstractions, the
 programmer can write a unique behavior and exploit it to receive data sent over
-heterogeneous technology stacks. Indeed, the \code{receiveTemperature}
-operation takes measurements from both the \code{inputPort}s.
+heterogeneous technology stacks. Indeed, the \code{receiveTemperature} operation
+takes measurements from both the \code{inputPort}s.
 %
 For instance, if communication over \code{CollectorPort2} fails, port
 \code{CollectorPort1} can still receive data.
 %
 Programmers can also specify elaborations that depend on the used technologies,
-by using different operations in different ports.
-Jolie supports both inbound and outbound
-communications, the latter declared with \code{outputPort}s, whose structure
-follows that of \code{inputPort}s. Furthermore, the \code{Location} and
-\code{Protocol} of \code{outputPort}s can be changed at runtime, enabling the
-dynamic selection of the appropriate technologies for each context.
+by using different operations in different ports. Jolie supports both inbound
+and outbound communications, the latter declared with \code{outputPort}s, whose
+structure follows that of \code{inputPort}s. Furthermore, the \code{Location}
+and \code{Protocol} of \code{outputPort}s can be changed at runtime, enabling
+the dynamic selection of the appropriate technologies for each context.
 
 As mentioned, Jolie enforces a strict separation of concerns between behavior,
 describing the logic of the application, and deployment, describing the
-communication capabilities. The behavior is defined using the typical
-constructs of structured sequential programming, communication primitives, and
-operators to deal with concurrency (parallel composition and input
+communication capabilities. The behavior is defined using the typical constructs
+of structured sequential programming, communication primitives, and operators to
+deal with concurrency (parallel composition and input
 choices~\cite{MontesiGZ14}).
 
 Jolie communication primitives comprise two modalities of interaction.
 
 Outbound~\code{OneWay} communications send a message asynchronously, while
 \code{RequestResponse} communications send a message and wait for a reply (they
-capture the well-known pattern of request-response
-interactions~\cite{req-rep}). Dually, inbound \code{OneWay} communications wait
-to receive a message, without sending a reply, while inbound \code{RequestResponse}s wait for a message
-and send back a reply.
+capture the well-known pattern of request-response interactions~\cite{req-rep}).
+Dually, inbound \code{OneWay} communications wait to receive a message, without
+sending a reply, while inbound \code{RequestResponse}s wait for a message and
+send back a reply.
 
-Jolie supports many communication media (via keyword
-\code{Location}) and data protocols (via keyword \code{Protocol}) in a simple,
-uniform way. This is one of the main features of the Jolie language, and the
-reason why we base our approach on it.
+Jolie supports many communication media (via keyword \code{Location}) and data
+protocols (via keyword \code{Protocol}) in a simple, uniform way. This is one of
+the main features of the Jolie language, and the reason why we base our approach
+on it.
 %
 Each communication port declares the medium and data protocol used to
-communicate, hence, to switch to a different technology stack, one just needs
-to change the declaration of \code{Location} and \code{Protocol} of a given
-port. As expected, the behavior (i.e., the actual logic of computation) of any
-Jolie program is unaffected by any change to its ports. Hence, a Jolie program
-can provide the same service (i.e., the same behavior) through different media
-and protocols just by specifying different deployments. Being born in the field
-of SOAs, Jolie supports the main technologies from that area: e.g.,
-communication media like TCP/IP sockets, Bluetooth L2CAP, Java RMI, and Unix
-local sockets; and data protocols like HTTP, JSON-RPC, XML-RPC, SOAP and their
-respective SSL versions.
+communicate, hence, to switch to a different technology stack, one just needs to
+change the declaration of \code{Location} and \code{Protocol} of a given port.
+As expected, the behavior (i.e., the actual logic of computation) of any Jolie
+program is unaffected by any change to its ports. Hence, a Jolie program can
+provide the same service (i.e., the same behavior) through different media and
+protocols just by specifying different deployments. Being born in the field of
+SOAs, Jolie supports the main technologies from that area: e.g., communication
+media like TCP/IP sockets, Bluetooth L2CAP, Java RMI, and Unix local sockets;
+and data protocols like HTTP, JSON-RPC, XML-RPC, SOAP and their respective SSL
+versions.
 
 \section{Contribution}
 \label{sec:contribution}
-To substantiate the effectiveness of our language-based approach to IoT
-integration, we add to Jolie support for the main communication stacks used in the
-IoT setting. Concretely, the added contribution of JIoT with respect to Jolie
-is the integration of two application protocols relevant in the IoT scenario,
-namely CoAP~\cite{doi:10.17487/RFC7252,coap} and MQTT~\cite{mqtt-v3.1.1,mqtt}.
-Notably, in JIoT the usage of such protocols is supported by the same
-linguistic abstractions that Jolie uses for SOAs protocols such as HTTP and
-SOAP.
 
-Even if Jolie provides support for the integration of new protocols, when set
-in the context of IoT technology, the task is non trivial. Indeed, all the
+To substantiate the effectiveness of our language-based approach to IoT
+integration, we add to Jolie support for the main communication stacks used in
+the IoT setting. Concretely, the added contribution of JIoT with respect to
+Jolie is the integration of two application protocols relevant in the IoT
+scenario, namely CoAP~\cite{doi:10.17487/RFC7252,coap} and
+MQTT~\cite{mqtt-v3.1.1,mqtt}. Notably, in JIoT the usage of such protocols is
+supported by the same linguistic abstractions that Jolie uses for SOAs protocols
+such as HTTP and SOAP.
+
+Even if Jolie provides support for the integration of new protocols, when set in
+the context of IoT technology, the task is non trivial. Indeed, all the
 protocols previously supported by Jolie exploit the same internal interface,
 based on two assumptions: \emph{i}) the usage of underlying technologies that
 ensure reliable communications and \emph{ii}) a point-to-point communication
 pattern.
 
-However, those assumptions do not hold when considering the two IoT technologies we integrate:
+However, those assumptions do not hold when considering the two IoT technologies
+we integrate:
 
 \begin{itemize}
+
  \item CoAP communications can be unreliable since they are based on UDP
-       connectionless datagrams. CoAP provides options for reliable
-       communications, however these are usually disabled in an IoT setting,
-       since it is important to preserve battery and bandwidth;
+       connectionless datagrams. CoAP provides options for reliable communications,
+       however these are usually disabled in an IoT setting, since it is important to
+       preserve battery and bandwidth;
 
  \item MQTT communications are based on the publish-subscribe paradigm, which
-       contrasts with the point-to-point paradigm underlying the Jolie
-       communication primitives. Hence, we need to define a mapping to express
-       publish-subscribe operations in terms of Jolie communication abstractions. In doing so, we need to balance two factors:
-       \emph{i}) preserving the simplicity of use of the point-to-point
-       communication style and \emph{ii}) capturing the typical
+       contrasts with the point-to-point paradigm underlying the Jolie communication
+       primitives. Hence, we need to define a mapping to express publish-subscribe
+       operations in terms of Jolie communication abstractions. In doing so, we need
+       to balance two factors: \emph{i}) preserving the simplicity of use of the
+       point-to-point communication style and \emph{ii}) capturing the typical
        publish-subscribe flow of communications. Such a mapping is particularly
-       challenging in the case of request-response communications. Remarkably,
-       the mapping that we present in this work is general and could be used
-       also in other contexts.
+       challenging in the case of request-response communications. Remarkably, the
+       mapping that we present in this work is general and could be used also in other
+       contexts.
+
 \end{itemize}
 
 This paper integrates, revises, and extends material
@@ -269,24 +276,28 @@ technical details on the proposed language-based approach to IoT integration.
 Main extensions comprise:
 
 \begin{itemize}
- \item advanced technical details on our implementation (Section~\ref{sub:implementation}) including:
+
+ \item advanced technical details on our implementation
+       (Section~\ref{sub:implementation}) including:
 
        \begin{itemize}
-        \item a general account on how media and protocols are separated from the
-              Jolie interpreter and how they can be developed as independent modules;
+
+        \item a general account on how media and protocols are separated from
+              the Jolie interpreter and how they can be developed as independent
+              modules;
 
         \item extensive details on the implementation of UDP, CoAP, and MQTT
               protocols;
 
        \end{itemize}
 
- \item a comprehensive case study on a home automation scenario (Section~\ref{sub:case}) where we
-       consider:
+ \item a comprehensive case study on a home automation scenario
+       (Section~\ref{sub:case}) where we consider:
 
        \begin{itemize}
 
-        \item local, cross-layer communication among edge devices and
-              mid-tier controllers;
+        \item local, cross-layer communication among things and mid-tier
+              controllers (edge devices and fog nodes);
 
         \item remote, cross-layer interactions among Cloud nodes and mid-tier
               controllers.
@@ -306,19 +317,19 @@ programming low-level edge devices. Given these positive remarks, we
 investigated the feasibility of running JIoT programs over edge devices,
 possibly including additional language abstractions to provide low-level access
 to in-board sensors and actuators. However, our survey revealed a market of
-devices fragmented over incompatible hardware architectures and characterized
-by strong constraints over both computational power and energy consumption.
+devices fragmented over incompatible hardware architectures and characterized by
+strong constraints over both computational power and energy consumption.
 Considering these limitations, we concluded that supporting the execution of
 JIoT-like programs over edge devices would require a strong engineering effort.
 While this research direction is promising, we deem it non-urgent, since
 currently developers tend to program very simple behaviors for edge
 devices~\cite{7123563}, which usually capture some data (e.g., through one of
-their sensors) and then send them to mid-to-top-tier devices. The latter
-usually process and coordinate the flow of data: they have powerful hardware,
-they communicate over reliable channels, and they have fewer (if any)
-constraints with respect to battery/energy consumption. 
+their sensors) and then send them to mid-to-top-tier devices. The latter usually
+process and coordinate the flow of data: they have powerful hardware, they
+communicate over reliable channels, and they have fewer (if any) constraints
+with respect to battery/energy consumption.
 
 Considered the discussion above, in this work we omit the low-level programming
-of edge devices and we focus on mid-to-top-tier ones, which can host the JIoT
+of things and we focus on mid-to-top-tier ones, which can host the JIoT
 runtime and which, given their topological context, directly benefit from the
 flexibility of the approach.
