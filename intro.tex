@@ -205,7 +205,7 @@ Outbound~\code{OneWay} communications send a message asynchronously, while
 \code{RequestResponse} communications send a message and wait for a reply (they
 capture the well-known pattern of request-response
 interactions~\cite{req-rep}). Dually, inbound \code{OneWay} communications wait
-for a message, while \code{RequestResponse} communications wait for a message
+to receive a message, without sending a reply, while inbound \code{RequestResponse}s wait for a message
 and send back a reply.
 
 %
