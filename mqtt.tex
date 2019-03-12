@@ -1,34 +1,34 @@
 \textit{Message Queue Telemetry Transport} (MQTT)~\cite{mqtt,mqtt-v3.1.1} is a
 publish/subscribe messaging application protocol built on top of
-the TCP transport protocol. 
+the TCP transport protocol.
 
 A typical publish/subscribe interaction pattern can be diagrammatically
 represented as in \cref{fig:pub_sub_encoding_one_way} where:
 
 \begin{enumerate}
-  \item a Subscriber subscribes to topic (a) at some Broker;
-  \item a Publisher publishes a message to topic (a) at the same Broker;
-  \item the Broker forwards the message to topic (a) to the Subscriber.
- \end{enumerate}
- 
+ \item a Subscriber subscribes to topic (a) at some Broker;
+ \item a Publisher publishes a message to topic (a) at the same Broker;
+ \item the Broker forwards the message to topic (a) to the Subscriber.
+\end{enumerate}
+
 \begin{figure}[th]
-% \hspace{1em}\resizebox{0.4\textwidth}{!}{
-\begin{center}  
-\begin{sequencediagram}
-\setUmlSeqChartStyle
+ % \hspace{1em}\resizebox{0.4\textwidth}{!}{
+ \begin{center}
+  \begin{sequencediagram}
+   \setUmlSeqChartStyle
 
-  \newinst{sub}{Subscriber}
-  \newinst[3.2]{bro}{Broker}
-  \newinst[3.2]{pub}{Publisher}
+   \newinst{sub}{Subscriber}
+   \newinst[3.2]{bro}{Broker}
+   \newinst[3.2]{pub}{Publisher}
 
-  \mess{sub}{{1) Subscribe to (a)}}{bro}
-  \mess{pub}{{2) Publish at (a)}}{bro}
-  \mess{bro}{{3) Forward message in (a)}}{sub}
-\end{sequencediagram}
-\end{center}
-% }
-\caption{\label{fig:pub_sub_encoding_one_way}
-Typical publish/subscribe interaction pattern.}
+   \mess{sub}{{1) Subscribe to (a)}}{bro}
+   \mess{pub}{{2) Publish at (a)}}{bro}
+   \mess{bro}{{3) Forward message in (a)}}{sub}
+  \end{sequencediagram}
+ \end{center}
+ % }
+ \caption{\label{fig:pub_sub_encoding_one_way}
+  Typical publish/subscribe interaction pattern.}
 \end{figure}
 
 More generally, messages published on a topic are forwarded to all current subscribers for the topic.
@@ -38,12 +38,12 @@ quality of service (QoS) for the delivery of each message published by a
 publisher. QoS levels determine whether messages can be lost and/or duplicated.
 Concretely, QoS levels are as follows:
 \begin{itemize}
-  \item \textit{At most once} --- the message can be lost, no duplication
-  can occur.
-  \item \textit{At least once} --- delivery of the message is guaranteed, but
-  duplication may occur.
-  \item \textit{Exactly once} --- delivery of the message is guaranteed and
-  duplication cannot occur.
+ \item \textit{At most once} --- the message can be lost, no duplication
+       can occur.
+ \item \textit{At least once} --- delivery of the message is guaranteed, but
+       duplication may occur.
+ \item \textit{Exactly once} --- delivery of the message is guaranteed and
+       duplication cannot occur.
 \end{itemize}
 
 To present how we model the MQTT protocol in JIoT, we first detail the simpler
@@ -62,15 +62,15 @@ outbound communications.
 
 We exemplify \code{OneWay} inbound communications using the example in
 \cref{lst:mqtt_simple_ex}, which is a revision of the example in
-\cref{temperature_interface} by omitting the ports 
-\texttt{CollectorPort1} and \texttt{CollectorPort2} and 
+\cref{temperature_interface} by omitting the ports
+\texttt{CollectorPort1} and \texttt{CollectorPort2} and
 by adding an MQTT \code{inputPort} named \texttt{CollectorPort3}.
 %HTTP and CoAP ports and by adding an MQTT \code{inputPort}.
 
 \begin{figure}[t]
-\begin{lstlisting}[%
+ \begin{lstlisting}[%
   basicstyle=\footnotesize\ttfamily,
-  label=lst:mqtt_simple_ex, 
+  label=lst:mqtt_simple_ex,
   caption={Code of the Collector Example, revised for MQTT.}]
 interface TemperatureInterface {
  OneWay: receiveTemperature( string )
@@ -96,13 +96,13 @@ As expected, the program behavior and the structure of the \code{inputPort}
 are unchanged. Main novelties are:
 %
 \begin{itemize}
-  \item the used \code{Location} (line 6) has the prefix 
-  \code{"socket://"} (as seen in the HTTP port) since MQTT relies on TCP
-  transport protocol;
-  \item the used \code{Protocol} (line 7) is \code{mqtt};
-  \item the \code{.broker} protocol parameter (line 8), which is
-  compulsory when the \code{mqtt} protocol is used in \code{inputPort}s,
-  specifies the address of the Broker.
+ \item the used \code{Location} (line 6) has the prefix
+       \code{"socket://"} (as seen in the HTTP port) since MQTT relies on TCP
+       transport protocol;
+ \item the used \code{Protocol} (line 7) is \code{mqtt};
+ \item the \code{.broker} protocol parameter (line 8), which is
+       compulsory when the \code{mqtt} protocol is used in \code{inputPort}s,
+       specifies the address of the Broker.
 \end{itemize}
 %
 From the perspective of the programmer, the syntax and the effect of the
@@ -111,34 +111,34 @@ However, we actually exchange several messages to capture that effect in MQTT,
 as shown in \Cref{fig:mqtt_simple_ex}.
 
 \begin{figure}[t]
-\begin{center}
-\begin{sequencediagram}
-\setUmlSeqChartStyle
-\renewcommand{\mess}[6][0]{
-  \stepcounter{seqlevel}
-  \path
-  (#2)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess from) {};
-  \addtocounter{seqlevel}{#1}
-  \path
-  (#4)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess to) {};
-  \draw[->,>=angle 60] (mess from) -- (mess to) node[midway, above]
-  {\parbox{#5}{{#3\\#6}}};
-  \node (#3 from) at (mess from) {};
-  \node (#3 to) at (mess to) {};
-}
+ \begin{center}
+  \begin{sequencediagram}
+   \setUmlSeqChartStyle
+   \renewcommand{\mess}[6][0]{
+    \stepcounter{seqlevel}
+    \path
+    (#2)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess from) {};
+    \addtocounter{seqlevel}{#1}
+    \path
+    (#4)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess to) {};
+    \draw[->,>=angle 60] (mess from) -- (mess to) node[midway, above]
+    {\parbox{#5}{{#3\\#6}}};
+    \node (#3 from) at (mess from) {};
+    \node (#3 to) at (mess to) {};
+    }
 
-  \newinst{sub}{Collector}
-  \newinst[3.2]{bro}{Broker}
-  \newinst[3.2]{pub}{Device}
+    \newinst{sub}{Collector}
+    \newinst[3.2]{bro}{Broker}
+    \newinst[3.2]{pub}{Device}
 
-  \mess{sub}{{1) Subscribe to}}{bro}{3.2cm}{(receiveTemperature)}
-  \stepcounter{seqlevel}
-  \mess{pub}{{2) Publish on}}{bro}{3cm}{(receiveTemperature)}
-  \mess{bro}{{3) Forward message on}}{sub}{3.2cm}{(receiveTemperature)}
-\end{sequencediagram}
-\end{center}
-\caption{\label{fig:mqtt_simple_ex}
-Representation of the example in \cref{lst:mqtt_simple_ex}.}
+    \mess{sub}{{1) Subscribe to}}{bro}{3.2cm}{(receiveTemperature)}
+   \stepcounter{seqlevel}
+   \mess{pub}{{2) Publish on}}{bro}{3cm}{(receiveTemperature)}
+   \mess{bro}{{3) Forward message on}}{sub}{3.2cm}{(receiveTemperature)}
+  \end{sequencediagram}
+ \end{center}
+ \caption{\label{fig:mqtt_simple_ex}
+  Representation of the example in \cref{lst:mqtt_simple_ex}.}
 \end{figure}
 
 Beyond defining such message exchanges, we also need to decide how to identify
@@ -170,28 +170,28 @@ delivery of the actual message is the usual \code{Location} of the
 
 Regarding the selection of topics, similarly to what done for CoAP resources, in
 MQTT by default we map JIoT operations to topics, otherwise we use the
-\code{.osc} parameter \code{.alias} to loose the coupling between operations
-and topics. We remark that \code{.alias} parameters in \code{inputPort}s have a different
-behavior in MQTT with respect to HTTP and CoAP.\@ In CoAP the name of the resource extracted
-from the received message is used to derive the instantiation of the
-\code{.alias} template. The values resulting from the match are then
-inserted among the elements of the payload before storing it in the target
-variable \code{data}. Instead, in MQTT, the \code{.alias} parameter is used to
-identify the topic for subscription. For example, in \cref{lst:mqtt_simple_ex},
-one could add the \code{Protocol} parameter \code{.osc.receiveTemperature.alias
-= "temperature"} to specify that the selected topic for operation
-\code{receiveTemperature} is \code{"temperature"}. Note that, since
-there is no outgoing data, templates in MQTT \code{inputPort}s, such as
-\code{"temperature"} in the example, are constants (we require all such
-constants defined within the same
-\code{inputPort} to be distinct). Having only constant aliases is not a relevant
-limitation in the context of IoT, where topics are mostly statically fixed.
-Addressing this limitation without disrupting the uniformity of the Jolie
-programming model is not trivial and it is left as future work.
+\code{.osc} parameter \code{.alias} to loose the coupling between operations and
+topics. We remark that \code{.alias} parameters in \code{inputPort}s have a
+different behavior in MQTT with respect to HTTP and CoAP.\@ In CoAP the name of
+the resource extracted from the received message is used to derive the
+instantiation of the \code{.alias} template. The values resulting from the match
+are then inserted among the elements of the payload before storing it in the
+target variable \code{data}. Instead, in MQTT, the \code{.alias} parameter is
+used to identify the topic for subscription. For example, in
+\cref{lst:mqtt_simple_ex}, one could add the \code{Protocol} parameter
+\code{.osc.receiveTemperature.alias = "temperature"} to specify that the
+selected topic for operation \code{receiveTemperature} is \code{"temperature"}.
+Note that, since there is no outgoing data, templates in MQTT \code{inputPort}s,
+such as \code{"temperature"} in the example, are constants (we require all such
+constants defined within the same \code{inputPort} to be distinct). Having only
+constant aliases is not a relevant limitation in the context of IoT, where
+topics are mostly statically fixed. Addressing this limitation without
+disrupting the uniformity of the Jolie programming model is not trivial and it
+is left as future work.
 
 
 \begin{figure}[t]
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,caption={Example of
+ \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,caption={Example of
 outgoing MQTT \code{OneWay} communication.},label=lst:oneway_out]
 interface ThermostatInterface {
  OneWay: setTmp( TmpType )
@@ -221,13 +221,15 @@ To conclude the mapping of \code{OneWay} operations in MQTT, we consider here
 the case of outbound operations, exemplified in \cref{lst:oneway_out}.
 %
 Outgoing \code{OneWay} operations simply cause the publication of the value
-passed as the parameter of the invocation (line 19) at the Broker. The
-address of the Broker is defined by the \code{Location} (line 6) of the
+passed as the parameter of the invocation (line 19) at the Broker. The address
+of the Broker is defined by the \code{Location} (line 6) of the
 \code{outputPort} \code{Broker}. The topic is derived from the name of the
 \code{operation} and the parameter of the invocation, using protocol parameter
-\code{.alias} as usual. Being an MQTT publication, we specify the
-\code{.QoS} protocol parameter (line 10), which selects the QoS level
-``Exactly once'' for the operation \code{setTmp}.
+\code{.alias} as usual. Being an MQTT publication, we specify the \code{.QoS}
+protocol parameter (line 10), which selects the QoS level ``Exactly once'' for
+the operation \code{setTmp}. Similarly to what we have done in CoAP with the
+\code{contentFormat} protocol parameter, we define in \code{.format} the
+encoding of the message payload, in this case a ``raw'' stream of bytes.
 
 
 \subsection{Request-Response Communications in MQTT}
@@ -241,7 +243,7 @@ outbound \code{RequestResponse}. Afterwards, we will also discuss the
 dual inbound \code{RequestResponse}.
 
 \begin{figure}[t]
-\begin{lstlisting}[
+ \begin{lstlisting}[
 basicstyle=\footnotesize\ttfamily,
 label=lst:mqtt_example,
 caption=JIoT controller communicating over MQTT.]
@@ -284,7 +286,7 @@ with its reply. Many standard point-to-point communication technologies, such as
 HTTP/TCP and the already discussed CoAP/UDP, support request-response
 communications by defining means to link a given outgoing request to its reply.
 MQTT does not provide dedicated means to do such a linking.
-Thus we specify topics for both the request and the response, but it is responsibility of the programmer to ensure that corresponding topics are used in the client and in the server. A possibility for the programmer is to send the topic for the response inside the payload of the request message. 
+Thus we specify topics for both the request and the response, but it is responsibility of the programmer to ensure that corresponding topics are used in the client and in the server. A possibility for the programmer is to send the topic for the response inside the payload of the request message.
 %
 We identify the topic for the reply with the
 \code{.aliasResponse} \code{Protocol} parameter. Like for \code{.alias}
@@ -301,47 +303,47 @@ in the left part of \cref{fig:pub_sub_RR}. We will describe the right part later
 on, after having introduced inbound request-response communications.
 
 \begin{figure}[t]
-% \hspace{1em}\resizebox{0.4\textwidth}{!}{
-\begin{center}  
-\begin{sequencediagram}
-\setUmlSeqChartStyle
-\renewcommand{\mess}[6][0]{
-  \stepcounter{seqlevel}
-  \path
-  (#2)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess from) {};
-  \addtocounter{seqlevel}{#1}
-  \path
-  (#4)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess to) {};
-  \draw[->,>=angle 60] (mess from) -- (mess to) node[midway, above]
-  {\parbox{#5}{{#3\\#6}}};
-  \node (#3 from) at (mess from) {};
-  \node (#3 to) at (mess to) {};
-}
+ % \hspace{1em}\resizebox{0.4\textwidth}{!}{
+ \begin{center}
+  \begin{sequencediagram}
+   \setUmlSeqChartStyle
+   \renewcommand{\mess}[6][0]{
+    \stepcounter{seqlevel}
+    \path
+    (#2)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess from) {};
+    \addtocounter{seqlevel}{#1}
+    \path
+    (#4)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess to) {};
+    \draw[->,>=angle 60] (mess from) -- (mess to) node[midway, above]
+    {\parbox{#5}{{#3\\#6}}};
+    \node (#3 from) at (mess from) {};
+    \node (#3 to) at (mess to) {};
+    }
 
-  \newinst{pro}{Controller}
-  \newinst[3.2]{bro}{Broker}
-  \newinst[3.2]{the}{Thermostat}
+    \newinst{pro}{Controller}
+    \newinst[3.2]{bro}{Broker}
+    \newinst[3.2]{the}{Thermostat}
 
-  \postlevel
-  \mess{the}{{1) Subscribe to}}{bro}{3.2cm}{"42/getTemperature"}
-  \stepcounter{seqlevel}
-  \mess{pro}{{2) Subscribe to}}{bro}{3.2cm}{"42/getTempReply"}
-  \stepcounter{seqlevel}
-  \postlevel
-  \mess{pro}{{3) Publish to}}{bro}{3.2cm}{"42/getTemperature"}
-  \mess{bro}{{4) Forward message in}}{the}{3.2cm}{"42/getTemperature"}
-  \postlevel
-  \mess{the}{{5) Publish to}}{bro}{3.2cm}{"42/getTempReply"}
-  \mess{bro}{{6) Forward message in}}{pro}{3.2cm}{"42/getTempReply"}
+    \postlevel
+    \mess{the}{{1) Subscribe to}}{bro}{3.2cm}{"42/getTemperature"}
+   \stepcounter{seqlevel}
+   \mess{pro}{{2) Subscribe to}}{bro}{3.2cm}{"42/getTempReply"}
+   \stepcounter{seqlevel}
+   \postlevel
+   \mess{pro}{{3) Publish to}}{bro}{3.2cm}{"42/getTemperature"}
+   \mess{bro}{{4) Forward message in}}{the}{3.2cm}{"42/getTemperature"}
+   \postlevel
+   \mess{the}{{5) Publish to}}{bro}{3.2cm}{"42/getTempReply"}
+   \mess{bro}{{6) Forward message in}}{pro}{3.2cm}{"42/getTempReply"}
 
-\end{sequencediagram}
-\end{center}
-% }
-\caption{\label{fig:pub_sub_RR} Interaction in the temperature automation
-example in MQTT.}
+  \end{sequencediagram}
+ \end{center}
+ % }
+ \caption{\label{fig:pub_sub_RR} Interaction in the temperature automation
+  example in MQTT.}
 \end{figure}
 
-First, the controller subscribes to the reply topic 
+First, the controller subscribes to the reply topic
 \code{"42/getTempReply"} at the Broker. Then, the controller
 sends to the Broker the request message on topic
 \code{"42/getTemperature"}. The execution of the \code{RequestResponse}
@@ -359,7 +361,7 @@ thermostat in our example is programmed in JIoT. We report its code in
 \cref{lst:in_mqtt_example}.
 
 \begin{figure}[t]
-\begin{lstlisting}[
+ \begin{lstlisting}[
 basicstyle=\footnotesize\ttfamily,
 label=lst:in_mqtt_example,
 caption=JIoT thermostat communicating over MQTT.]
@@ -377,20 +379,20 @@ inputPort Thermostat {
    .aliasResponse = "42/getTempReply"
   }
  }
- Interfaces: ThermostatInterface 
+ Interfaces: ThermostatInterface
 }
 
 main {
  //$\color{color:comment}\hspace{4em}\downarrow$ receive the temperature and store it under the root of temp
  getTmp( temp )( temp ){
- //$\hspace{8em}\color{color:comment}\uparrow$ update the content of temp and send it back as response 
+ //$\hspace{8em}\color{color:comment}\uparrow$ update the content of temp and send it back as response
  }
 }
 \end{lstlisting}
 \end{figure}
 
 At line 11 in \cref{lst:in_mqtt_example}, the \code{.alias} parameter
-\code{"42/getTemperature"} 
+\code{"42/getTemperature"}
 must be defined statically, as required for \code{inputPort}s.
 %is static, as usual for \code{inputPort}s.
 When the thermostat program is launched, it subscribes to topic
@@ -408,22 +410,22 @@ We now summarize the exchange between the controller and the thermostat (left
 part of \cref{fig:pub_sub_RR}):
 
 \begin{enumerate}
-  \item when the thermostat is started, it subscribes to topic \code{"42/getTemperature"} at the
-  Broker;
+ \item when the thermostat is started, it subscribes to topic \code{"42/getTemperature"} at the
+       Broker;
 
-  \item when the outgoing \code{RequestResponse} is executed, the controller
-  subscribes to topic \code{"42/getTempReply"} at the Broker;
+ \item when the outgoing \code{RequestResponse} is executed, the controller
+       subscribes to topic \code{"42/getTempReply"} at the Broker;
 
-  \item the controller publishes the request message to topic
-  \code{"42/getTemperature"};
+ \item the controller publishes the request message to topic
+       \code{"42/getTemperature"};
 
-  \item the Broker forwards the message in topic \code{"42/getTemperature"} to
-  the thermostat;
+ \item the Broker forwards the message in topic \code{"42/getTemperature"} to
+       the thermostat;
 
-  \item the thermostat publishes the computed response at topic \code{"42/getTempReply"};
+ \item the thermostat publishes the computed response at topic \code{"42/getTempReply"};
 
-  \item the Broker forwards the message on topic \code{"42/getTempReply"} to the
-  controller.
+ \item the Broker forwards the message on topic \code{"42/getTempReply"} to the
+       controller.
 
 \end{enumerate}
 
