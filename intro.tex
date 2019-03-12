@@ -71,21 +71,22 @@ ongoing work.
 \label{sec:approach}
 
 Without proper language abstractions, guaranteeing interoperability among
-protocols belonging to different technology stacks is highly complex. The problem is
-further exacerbated when one has to adapt the technology used for some specific
-interaction. The replacement may be either static, e.g., because of the
-deployment of new, heterogeneous devices in a pre-existing system, or dynamic,
-e.g., to support a changing topology of disparate mobile devices. Contrarily,
-with JIoT most of the complexity of guaranteeing interoperability is managed by
-the language interpreter and hidden from the programmer.
+protocols belonging to different technology stacks is highly complex. The
+problem is further exacerbated when one has to modify the technology stack used
+for some specific interaction. The replacement may be either static, e.g.,
+because of the deployment of new, heterogeneous devices in a pre-existing
+system, or dynamic, e.g., to support a changing topology of disparate mobile
+devices. Contrarily, with JIoT most of the complexity of guaranteeing
+interoperability is managed by the language interpreter and hidden from the
+programmer.
 
 As an illustrative example of the proposed approach, let us consider a scenario
 where we want to integrate two islands of IoT devices, both collecting
 temperature data, but relying on different communication stacks, namely HTTP
 over TCP and CoAP over UDP.
 %
-The end goal is to program a collector that receives temperature measurements
-from both islands and uses them for further elaboration.
+The end goal is to program a collector which receives and aggregates
+temperature measurements from both islands.
 
 Following the structure of Jolie programs, the collector programmed in JIoT is
 composed of two parts: a \emph{behavior}, specifying the logic of the
@@ -113,15 +114,15 @@ waits to receive a temperature measurement on \emph{operation}
 technology-specific concepts such as channels, resources, URLs,
 \dots). Upon reception, it stores the retrieved value in variable \code{data}.
 %
-Besides the logic of computation of the collector, we also need to specify the deployment, that is on
+Besides the logic of computation of the collector, we also need to specify the deployment, i.e., on
 which technologies the communication happens; in the example above, how the
 collector receives messages from other devices. In Jolie this information is
-defined within \emph{ports}. For instance, the port for receiving (denoted with
-keyword \code{inputPort}) HTTP measurements can be defined as follows:
+defined within \emph{ports}. For example, the port to receive (denoted with
+keyword \code{inputPort}) HTTP measurements can be defined as in \cref{lst:ex_port}.
 %
-\newline
+\begin{figure}
 \begin{lstlisting}[numbers=left,basicstyle=\ttfamily\footnotesize,caption=Example of interface
-and input port in Jolie.]
+and input port in Jolie.,label=lst:ex_port]
 interface TemperatureInterface {
  OneWay: receiveTemperature( string )
 }
@@ -132,12 +133,11 @@ inputPort CollectorPort1 {
  Interfaces: TemperatureInterface
 }
 \end{lstlisting}
-
+\end{figure}
+%
 Port \code{CollectorPort1} specifies that the collector expects inbound
 communications via \code{Protocol} \code{http} using a TCP/IP socket receiving
-at URL \code{"localhost"} on TCP port \code{8000}. The port and the operation
-are linked by the definition of \code{interface}
-\code{TemperatureInterface}. The interface declares the operation
+at URL \code{"localhost"} on TCP port \code{8000}. A port exposes a set of operations, collected within a set of \code{Interfaces}. In the example, the input port \code{CollectorPort1} declares to expose interface \code{TemperatureInterface}, which is defined at lines 1--3 of Listing of \code{interface} is declared at lines 1--3 of \cref{lst:ex_port}. The interface declares the operation
 \code{receiveTemperature}, including the type of expected data
 (\code{string}), as a \code{OneWay} operation, namely an asynchronous
 communication that does not require any reply from the collector (except the
