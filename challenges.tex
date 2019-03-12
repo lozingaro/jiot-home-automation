@@ -1,42 +1,42 @@
-Jolie currently supports some of the main technologies used in SOAs (e.g.
-HTTP). However, only a limited amount of IoT devices uses the media and
+Jolie currently supports some of the main technologies used in SOAs (e.g.,
+HTTP, SOAP). However, only a limited amount of IoT devices uses the media and
 protocols already supported by Jolie. Indeed, protocols such as
-CoAP~\cite{doi:10.17487/RFC7252,coap} and MQTT~\cite{mqtt-v3.1.1,mqtt},
-which are widely used in IoT scenarios, are not implemented in Jolie.
-Integrating these protocols, as we have done, is essential in order to allow
-Jolie programs to directly interact with the majority of IoT devices. We note
-that emerging frameworks for interoperability, such as the Web of
-Things~\cite{w3c17}, rely on the same protocols we mentioned for IoT, thus JIoT
-is also compliant with them.
+CoAP~\cite{doi:10.17487/RFC7252,coap} and MQTT~\cite{mqtt-v3.1.1,mqtt}, which
+are widely used in IoT scenarios, are not implemented in Jolie. Integrating
+these protocols, as we have done, is essential to allow Jolie programs to
+directly interact with the majority of IoT devices. We note that emerging
+frameworks for interoperability, such as the Web of Things~\cite{w3c17}, rely
+on the same protocols we mentioned for IoT, thus JIoT is also compliant with
+them.
 %
 However there are some
 challenges linked to the integration of these technologies within Jolie:
 
 \begin{itemize}
   \item \textit{lossless vs.\@ lossy protocols} --- In SOAs,
-  machine-to-machine communication relies on lossless protocols, as there are no
-  strict constraints on energy consumption or bandwidth, hence the number of
-  message exchanges at the transport level needed for ensuring a message
-  delivery is not critical. On the contrary, in IoT networks these
-  constraints exist and are important, and the choice of the protocol needs to
-  take them into account. Many protocols, and the CoAP application protocol in
-  particular, rely on the UDP transport protocol --- a connectionless protocol
-  that gives no guarantee on the delivery of messages, but allows one to limit
-  message exchanges, as well as energy and bandwidth consumption. Since Jolie assumes
-  lossless communications, the inclusion of connectionless protocols in the
-  language requires careful handling to prevent misbehaviors;
+  machine-to-machine communication relies on lossless protocols: there are no
+  strict constraints on energy consumption or bandwidth and it is not critical
+  how many transport-layer messages are needed to ensure reliable delivery.
+  That is not true in IoT networks, where communication is constrained by
+  energy consumption, which dictates what technology stack can be used. Indeed,
+  many IoT communication technologies, among which the mostly renowned CoAP
+  application protocol, rely on the UDP transport protocol --- a connectionless
+  protocol that gives no guarantee on the delivery of messages, but allows one
+  to limit message exchanges and, by extension, energy and bandwidth
+  consumption. Since Jolie assumes lossless communications, the inclusion of
+  connectionless protocols in the language requires careful handling to prevent
+  misbehaviors;
 
-  \item \textit{point-to-point vs.\@ publish-subscribe} --- In order
-  to provide language constructs that do not depend on the chosen protocol, we
-  need to find a uniform setting covering both point-to-point communications,
-  such as the ones of HTTP and CoAP, and publish-subscribe communications
-  typical of MQTT.\@ Jolie already provides language constructs usable with many
-  communication protocols, hence the less disruptive approach is to use the same
-  constructs, which are designed for a point-to-point setting, also for MQTT.\@
-  This requires to find for each point-to-point construct a corresponding effect
-  in the publish-subscribe paradigm, such that typical programming patterns
-  produce similar effects in both settings. In this way, one can program a
-  unique behavior valid for both point-to-point and publish-subscribe
-  scenarios.
+  \item \textit{point-to-point vs.\@ publish-subscribe} --- The premise of the
+  Jolie language is to provide communication constructs that do not depend on a
+  specific technology. To do so, the language assumes a point-to-point
+  communication abstraction, which is common to many protocols like HTTP and
+  CoAP. However, to integrate the MQTT protocol in Jolie, we need to model its
+  point-to-point semantics as MQTT publish-subscribe operations. Indeed, Jolie
+  already provides language constructs usable with many communication
+  protocols, hence the less disruptive approach is to use the same constructs,
+  which are designed for a point-to-point setting, also for MQTT.\@ This
+  requires to find for each point-to-point construct a corresponding effect in
+  the publish-subscribe paradigm. The final result is that the execution of a given Jolie behavior is similar under both point-to-point and publish-subscribe technologies.
   
 \end{itemize} 
