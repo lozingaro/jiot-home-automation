@@ -302,6 +302,7 @@ on, after having introduced inbound request-response communications.
 
 \begin{figure}[t]
 % \hspace{1em}\resizebox{0.4\textwidth}{!}{
+\begin{center}  
 \begin{sequencediagram}
 \setUmlSeqChartStyle
 \renewcommand{\mess}[6][0]{
@@ -334,6 +335,7 @@ on, after having introduced inbound request-response communications.
   \mess{bro}{{6) Forward message in}}{pro}{3.2cm}{"42/getTempReply"}
 
 \end{sequencediagram}
+\end{center}
 % }
 \caption{\label{fig:pub_sub_RR} Interaction in the temperature automation
 example in MQTT.}
@@ -389,7 +391,7 @@ main {
 
 At line 11 in \cref{lst:in_mqtt_example}, the \code{.alias} parameter
 \code{"42/getTemperature"} 
-must be defined statically, as required for \code{InputPort}s.
+must be defined statically, as required for \code{inputPort}s.
 %is static, as usual for \code{inputPort}s.
 When the thermostat program is launched, it subscribes to topic
 \code{"42/getTemperature"}. When a message on this topic arrives, the payload
