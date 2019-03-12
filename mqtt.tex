@@ -104,11 +104,42 @@ are unchanged. Main novelties are:
   compulsory when the \code{mqtt} protocol is used in \code{inputPort}s,
   specifies the address of the Broker.
 \end{itemize}
+%
+From the perspective of the programmer, the syntax and the effect of the
+communication primitive are the same as in \cref{temperature_interface}.
+However, we actually exchange several messages to capture that effect in MQTT,
+as shown in \Cref{fig:mqtt_simple_ex}.
 
-While the syntax and the effect of the communication primitive from the point
-of view of the programmer are the same as the ones in
-\cref{temperature_interface}, the actual message exchanges performed to obtain
-such an effect are different, as shown in \Cref{fig:mqtt_simple_ex}.
+\begin{figure}[t]
+\begin{center}
+\begin{sequencediagram}
+\setUmlSeqChartStyle
+\renewcommand{\mess}[6][0]{
+  \stepcounter{seqlevel}
+  \path
+  (#2)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess from) {};
+  \addtocounter{seqlevel}{#1}
+  \path
+  (#4)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess to) {};
+  \draw[->,>=angle 60] (mess from) -- (mess to) node[midway, above]
+  {\parbox{#5}{{#3\\#6}}};
+  \node (#3 from) at (mess from) {};
+  \node (#3 to) at (mess to) {};
+}
+
+  \newinst{sub}{Collector}
+  \newinst[3.2]{bro}{Broker}
+  \newinst[3.2]{pub}{Device}
+
+  \mess{sub}{{1) Subscribe to}}{bro}{3.2cm}{(receiveTemperature)}
+  \stepcounter{seqlevel}
+  \mess{pub}{{2) Publish on}}{bro}{3cm}{(receiveTemperature)}
+  \mess{bro}{{3) Forward message on}}{sub}{3.2cm}{(receiveTemperature)}
+\end{sequencediagram}
+\end{center}
+\caption{\label{fig:mqtt_simple_ex}
+Representation of the example in \cref{lst:mqtt_simple_ex}.}
+\end{figure}
 
 Beyond defining such message exchanges, we also need to decide how to identify
 the topic on which the message exchange is performed.
@@ -139,10 +170,10 @@ delivery of the actual message is the usual \code{Location} of the
 
 Regarding the selection of topics, similarly to what done for CoAP resources, in
 MQTT by default we map JIoT operations to topics, otherwise we use the
-\code{.osc} parameter \code{.alias} to enable loose coupling between operations
+\code{.osc} parameter \code{.alias} to loose the coupling between operations
 and topics. We remark that \code{.alias} parameters in \code{inputPort}s have a different
 behavior in MQTT with respect to HTTP and CoAP.\@ In CoAP the name of the resource extracted
-from the received message is used to derive the correct instantiation of the
+from the received message is used to derive the instantiation of the
 \code{.alias} template. The values resulting from the match are then
 inserted among the elements of the payload before storing it in the target
 variable \code{data}. Instead, in MQTT, the \code{.alias} parameter is used to
@@ -156,49 +187,8 @@ constants defined within the same
 \code{inputPort} to be distinct). Having only constant aliases is not a relevant
 limitation in the context of IoT, where topics are mostly statically fixed.
 Addressing this limitation without disrupting the uniformity of the Jolie
-programming model is not trivial and is left as future work.
+programming model is not trivial and it is left as future work.
 
-
-\begin{figure}[t]
-\begin{sequencediagram}
-\setUmlSeqChartStyle
-\renewcommand{\mess}[6][0]{
-  \stepcounter{seqlevel}
-  \path
-  (#2)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess from) {};
-  \addtocounter{seqlevel}{#1}
-  \path
-  (#4)+(0,-\theseqlevel*\unitfactor-0.7*\unitfactor) node (mess to) {};
-  \draw[->,>=angle 60] (mess from) -- (mess to) node[midway, above]
-  {\parbox{#5}{{#3\\#6}}};
-  \node (#3 from) at (mess from) {};
-  \node (#3 to) at (mess to) {};
-}
-
-  \newinst{sub}{Collector}
-  \newinst[3.2]{bro}{Broker}
-  \newinst[3.2]{pub}{Device}
-
-  \mess{sub}{{1) Subscribe to}}{bro}{3.2cm}{(receiveTemperature)}
-  \stepcounter{seqlevel}
-  \mess{pub}{{2) Publish on}}{bro}{3cm}{(receiveTemperature)}
-  \mess{bro}{{3) Forward message on}}{sub}{3.2cm}{(receiveTemperature)}
-\end{sequencediagram}
-\caption{\label{fig:mqtt_simple_ex}
-Representation of the example in \cref{lst:mqtt_simple_ex}.}
-\end{figure}
-
-To conclude the mapping of \code{OneWay} operations in MQTT, we consider here
-the case of outbound operations, exemplified in \cref{lst:oneway_out}.
-%
-Outgoing \code{OneWay} operations simply cause the publication of the value
-passed as the parameter of the invocation (line 19) at the Broker. The
-address of the Broker is defined by the \code{Location} (line 6) of the
-\code{outputPort} \code{Broker}. The topic is derived from the name of the
-\code{operation} and the parameter of the invocation, using protocol parameter
-\code{.alias} as usual. Being an MQTT publication, we specify the
-\code{.QoS} protocol parameter (line 10), which selects the QoS level
-``Exactly once'' for the operation \code{setTmp}.
 
 \begin{figure}[t]
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,caption={Example of
@@ -226,6 +216,19 @@ main {
 }
 \end{lstlisting}
 \end{figure}
+
+To conclude the mapping of \code{OneWay} operations in MQTT, we consider here
+the case of outbound operations, exemplified in \cref{lst:oneway_out}.
+%
+Outgoing \code{OneWay} operations simply cause the publication of the value
+passed as the parameter of the invocation (line 19) at the Broker. The
+address of the Broker is defined by the \code{Location} (line 6) of the
+\code{outputPort} \code{Broker}. The topic is derived from the name of the
+\code{operation} and the parameter of the invocation, using protocol parameter
+\code{.alias} as usual. Being an MQTT publication, we specify the
+\code{.QoS} protocol parameter (line 10), which selects the QoS level
+``Exactly once'' for the operation \code{setTmp}.
+
 
 \subsection{Request-Response Communications in MQTT}
 \label{sub:rr_in_mqtt}
