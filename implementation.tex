@@ -19,23 +19,24 @@ the integration of new protocols in the language.
 To better illustrate this structure, we report in \cref{fig:comm_modules} a
 conceptual representation of the call flow that originates from the execution
 logic of the language and interacts with the external libraries present in a
-given installation. The flow starts from the Execution Engine, which
+given installation. The flow starts from the \textsf{Execution Engine}, which
 interprets Jolie commands, and which is the originator of the communication
-flows. This is represented by arrow \circled{0} from the Execution Engine.
-From there, the call reaches the Communication Core, which implements the
-generic logic of channel creation, in turn relying on the pairing of a medium
-and a protocol. In the interpreter, this division is generalized with abstract
-factories for media and protocols. At runtime, the Communication Core proceeds
-(arrows \circled{1}) to load the medium factory requested in the call from the
-Execution Engine---in the figure we assume this is Socket---and, from that, it
-obtains an implementation of the actual logic of a TCP/IP channel, which
-includes a Communication Channel for managing outbound communications and a
-Listener for managing inbound communications. Finally, the Communication Core
-associates (arrows
+flows. This is represented by arrow \circled{0} from the \textsf{Execution
+Engine}. From there, the call reaches the \textsf{Communication Core}, which
+implements the generic logic of channel creation, in turn relying on the
+pairing of a medium and a protocol. In the interpreter, this division is
+generalized with abstract factories for media and protocols. At runtime, the
+\textsf{Communication Core} proceeds (arrows \circled{1}) to load the medium
+factory requested in the call from the \textsf{Execution Engine} --- in the
+figure we assume this is \textsf{Socket} --- and, from that, it obtains an
+implementation of the actual logic of TCP/IP channels, split between a channel
+class, to handle outbound communications, and listener class, for inbound
+communications. Finally, the \textsf{Communication Core} associates (arrows
 \circled{2}) a protocol to the obtained medium. The flow is similar to that of
-media: the Communication Core loads the protocol factory requested in the call
-from the Execution Engine---in the figure we assume this is HTTP---and, from
-that, it obtains an object that implements the logic of the HTTP
+media: the \textsf{Communication Core} loads the protocol factory requested in
+the call from the \textsf{Execution Engine} --- in the figure we assume this
+is HTTP
+--- and, from that, it obtains an object that implements the logic of the HTTP
 protocol.
 
 \begin{figure}[t]
@@ -55,17 +56,16 @@ described in \Cref{sub:jolie_extensions}, this entailed the creation of two
 new libraries for the Jolie interpreter: a medium library for UDP and a
 protocol library for CoAP.
 
-We remark that, since UDP and CoAP are independent libraries, our 
-implementation of UDP can also be used to support other protocols 
-relying on UDP, such as MQTT-SN~\cite{hunkeler08}. 
-The implementation of UDP consists in a listener and
-a sender class, both based on the Netty framework~\cite{maurer16}. Since the
-structure expected by Jolie and the one provided by Netty are similar, the
-integration of UDP is smooth.
-An interesting point is that exceptions raised by Netty are captured and
-transformed into JIoT exceptions. These exceptions are notified to the
+We remark that, since UDP and CoAP are independent libraries, our
+implementation of UDP can also be used to support other protocols relying on
+UDP, such as MQTT-SN~\cite{hunkeler08}. The implementation of UDP consists in
+a listener and a channel class, both based on the Netty
+framework~\cite{maurer16}. Since the structure expected by Jolie and the one
+provided by Netty are similar, the integration of UDP is smooth. An
+interesting point is that exceptions raised by Netty are captured and
+transformed into Jolie exceptions. These exceptions are notified to the
 application protocol, which can either manage them or raise them at the level
-of the behavior of the JIoT program.
+of the behavior of the Jolie program.
 
 The implementation of the CoAP library consists in a class taking care of encoding and decoding the message abstraction of Jolie, namely the Communication Message, into a CoAP formatted one. A second class, handling the encoding and decoding of a CoAP message into a buffer of bytes, is based on the work done in nCoAP~\cite{ncoap}, an open source project providing a CoAP implementation for Java, based itself on Netty.
 
@@ -96,10 +96,10 @@ Jolie. This means that, theoretically, the implementation of MQTT would have
 only entailed the creation of a dedicated MQTT protocol library. However, as
 detailed in \Cref{sub:jolie_extensions}, Jolie assumes an end-to-end
 communication pattern where the caller initiates the creation of a
-communication channel with a server, which in turn listens for such inbound
+communication channel with a server, which in turn expects such inbound
 requests. For this reason, given a certain medium, \code{inputPort}s and
 \code{outputPort}s use a medium-specific implementation of, respectively, a
-listener class and a sender class.
+listener class and a channel class.
 %
 This pattern, separating listeners from senders, does not apply to
 publish/subscribe protocols, where both the subscriber and the publisher need
@@ -109,7 +109,7 @@ essentially a wrapper implementing the logic of Publish-Subscribe message
 handling on any other point-to-point medium available (TCP socket in the case
 of MQTT) to the interpreter. Although we strove to separate the concerns
 between the Jolie interpreter and this new Public-Subscribe channel, we had to
-introduce a minimal update into the Jolie Communication Core so that it could
+introduce a minimal update into the Jolie \textsf{Communication Core} so that it could
 choose between the standard end-to-end media and the new wrapper.
 
 The MQTT protocol class both encodes and decodes messages and implements the QoS
