@@ -132,27 +132,28 @@ In the example, we define \code{.osc} parameters for both operations
 \code {getTmp} and \code{setTmp}.\@ At line 13 we specify that the CoAP verb
 used for operation \code{getTmp} is \code{"GET"}. At line 14 we define, using
 the \code{.contentFormat} parameter, that the encoding of the payload of the
-message in text format\todo{right? Or is it \code{"raw"}? Also for
-\code{setTmp}?} (\code{"text/plain"}). Other accepted values for the
+message in text format\todo{right? Is it the old \code{"raw"}?} (\code{"text/plain"}). Other accepted values for the
 \code{.contentFormat} parameter are \code{"json"} and \code{"xml"}. Marshalling
 and un-marshalling is automatic and transparent to the programmer. This feature
 is enabled by the structure of Jolie variables, which are always tree-shaped,
-hence they can easily be translated into representations based on that shape.
+hence they can be easily translated into representations based on that shape.
 At line 15 we set the \code{.messageType} parameter to
 \code{"CON"}, that stands for confirmable. Accepted values for the
-\code{.messageType} parameter are confirmable and not confirmable. In the
-first case the sender will receive an acknowledgment message from the
-receiver, in the second case it will not. At line 16, following the practice
-introduced in~\cite{montesi16}, we specify that \code{getTmp} \code{alias}es a
-resource whose path concatenates a static part, given by the \code{Location},
-and the instantiation of the template \lstinline|"/%!{id}/getTemperature"|
-provided by protocol parameter \code{.alias}. The template is instantiated
-using values from the parameter of the operation invocation in the behavior,
-e.g., value \code{42} at line 28\footnote{In Jolie the dot \code{.} defines
-path traversals inside trees. Hence, the notation \code{\{.id = 42\}}
-indicates a tree with an empty root and a subnode called \code{id}, whose
-value is \code{42}.}. Hence, the interpretation of the declaration at line 16
-is that, when invoking operation \code{getTmp} at runtime, the element
+\code{.messageType} parameter are confirmable and not confirmable
+(\code{"UNCON"}\todo{right?}\todo{btw, what is the default?}). In the first
+case the sender will receive an acknowledgment message from the receiver, in
+the second case it will not. At line 16, following the practice introduced
+in~\cite{montesi16}, we specify that
+\code{getTmp} \code{alias}es a resource whose path concatenates a static part,
+given by the \code{Location}, and the instantiation of the template
+\lstinline|"/%!{id}/getTemperature"| provided by protocol parameter
+\code{.alias}. The template is instantiated using values from the parameter of
+the operation invocation in the behavior, e.g., value \code{42} at line
+28\footnote{In Jolie the dot \code{.} defines path traversals inside trees.
+Hence, the notation \code{\{.id = 42\}} indicates a tree with an empty root and
+a subnode called \code{id}, whose value is \code{42}.}. Hence, the
+interpretation of the declaration at line 16 is that, when invoking operation
+\code{getTmp} at runtime, the element
 \code{id} of the invocation will be removed from the payload and used to form
 the address of the requested resource. The aliasing for operation
 \code{setTmp} (line 21) is similar to that of \code{getTmp}, while the
