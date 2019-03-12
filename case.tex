@@ -4,19 +4,17 @@
   \caption{Conceptual overview of the home automation case study.}
   \label{fig:case_study_overview} \end{figure}
 
-In this section we detail the programming of a JIoT system, focusing on a home
-automation case study. We remark that the techniques used in the case study
-are not specific of home automation, and can be used in any setting where many
-Things based on heterogeneous technologies need to be orchestrated. Notably,
-new Things can enter the system at any time. The whole source code of the
-system is released under the GPL v.3
-license and available at \cite{jiot}. We
-report in \cref{fig:case_study_overview} a schematic overview of the overall
-structure of the case study, where Cloud nodes and mid-tier controllers
-(represented by the ``JIoT Orchestration'' element in
-\cref{fig:case_study_overview}) are programmed in JIoT and orchestrate the
-behavior of a number of heterogeneous devices (whose low-level programming is
-omitted here): 
+In this section, we detail the programming of a home automation case study with
+JIoT. We remark that the techniques presented in this case study are not
+specific to home automation and can be used in any setting where heterogeneous
+IoT technology stacks need interact. The use case is peculiar as new edge
+devices can be included in the system at runtime. The source code of the system
+is released under the GPL v.3 license and available at~\cite{jiot}. We report
+in \cref{fig:case_study_overview} a schematic overview of the case study, where
+Cloud nodes and mid-tier controllers (represented by the element labeled ``JIoT
+Orchestration'' in \cref{fig:case_study_overview}) are programmed in JIoT and
+orchestrate the behavior of a number of heterogeneous edge devices (whose
+low-level programming is omitted here):
 
 \begin{itemize} 
 
@@ -42,25 +40,23 @@ above;
 
 \end{itemize}
 
-This case study has been selected since it involves a heterogeneous sample of
-current IoT solutions, to give an account on how JIoT can manage them.
-Concretely, the case study combines commercial solutions---e.g., the Philips
-Hue Hub and the Hue White Lamps system where the Lamps are controlled by the
-Hub---with custom ones---these span from sensors directly connected to a
-board, as it happens for the Adafruit DHT22 temperature sensor, to solutions
-that integrate a pre-existing hardware, like the ESP8266 that manages a
-pre-existing thermostat. As illustrated in \cref{fig:case_study_overview},
-this heterogeneity of devices provides for a comprehensive scenario where we
-need JIoT programs that use different application and transport protocols. In
+The case study combines commercial solutions --- e.g., the Philips Hue Hub and
+the Hue White Lamps system where the Lamps are controlled by the Hub --- with
+custom ones --- these span from sensors directly connected to a board, as it
+happens for the Adafruit DHT22 temperature sensor, to solutions that integrate
+a pre-existing hardware, like the ESP8266 that manages a pre-existing
+thermostat. As illustrated in \cref{fig:case_study_overview}, this
+heterogeneity of devices provides for a comprehensive scenario where we need
+JIoT programs that use different application and transport protocols. In
 particular, Philips and Samsung Hubs communicate with the orchestrator over
 HTTP/TCP, the Arduino over MQTT/TCP, and the ESP8266 over CoAP/UDP.
 
-In the use case we build a simple logic providing two functionalities:
-lighting and temperature system control. The lighting system turns on the
-lights when the motion sensor detects someone at home and external luminosity
-is below some threshold. The temperature control checks the temperature and
-turns on the heating system when the temperature is below some threshold. The
-threshold has different values depending on whether someone is at home or not.
+In the use case we build a simple logic providing two functionalities: lighting
+and temperature system control. The lighting system turns on the lights when
+the motion sensor detects someone at home and the outdoor luminosity is below
+some threshold. The temperature control checks the temperature and turns on the
+heating system when the temperature is below some threshold. The threshold has
+different values depending on whether someone is at home or not.
 
 \begin{figure}[b]
   \centering
@@ -75,15 +71,40 @@ We now describe the structure of the orchestration in the case study, which is
 illustrated in~\cref{fig:case_study_abstraction}.
 %
 The orchestration is composed of multiple JIoT programs. From top to bottom of
-\cref{fig:case_study_abstraction}, the \texttt{LogicEngine} contains the
-general logic of system control (i.e., the one that collects data from sensors
-and coordinates the execution of actions in the system). Since the
+\cref{fig:case_study_abstraction}, the \texttt{LogicEngine} \todo{Mettere anche
+``Engine'' in bold in \cref{fig:case_study_abstraction}} contains the general
+logic of system control (i.e., the one that collects the data from sensors and
+coordinates the execution of the actions in the system). Since the
 \texttt{LogicEngine} interacts with a multitude of mid-tier devices, its
 natural deployment is in the Cloud, where it is possible to scale it according
 to the number of managed devices and the load of computation. At the mid-tier
 level we have JIoT \texttt{Driver}s. Each \texttt{Driver} interacts with a
 specific edge device and it is deployed in a mid-tier machine in the proximity
 of the controlled edge device.
+
+\subsection{Thing Descriptors}
+
+In the case study, the \texttt{Driver}s are statically configured to manage a
+single fixed device using a JSON-LD 1.1 (that stands for JSON Linkage Data)
+configuration file~\cite{jsonld}. The choice of JSON-LD is not mandatory, but
+it has the benefit of following the standard W3C Web of Things~\cite{w3c17}
+definition of Thing Description (TD). This makes our \texttt{Driver}s already
+compliant with other WoT frameworks, simplifying future integrations with
+other WoT systems.
+
+While discussing the full structure of TD is out of the scope of this
+paper, we present in \cref{fig:sensor_descriptor_1,fig:sensor_descriptor_2} examples of TDs used in our
+case study. In \cref{fig:sensor_descriptor_1} we report the TD
+for the DHT22 temperature sensor. For each device the JSON-LD file
+specifies whether it is a sensor or an actuator (key \lstinline|"type"|) and
+provides a textual description (key \lstinline|"description"|) and its name
+(key \lstinline|"name"|). Each TD provides a list of
+properties (key \lstinline|"properties"|) that can be read. Each property is
+described by the property identifier, \lstinline{"temperature"} in our
+example. The property identifier has various sub-elements describing it. In
+our example we use just key \lstinline{"label"} to describe the unit of
+measure.
+
 
 \begin{figure}[b]
   \centering
@@ -101,6 +122,13 @@ of the controlled edge device.
   ]
 }
 \end{lstlisting}
+\caption{Adafruit DHT22 Thing Descriptor.}
+  \label{fig:sensor_descriptor_1}
+\end{figure}
+
+
+\begin{figure}[tb]
+\centering
 \begin{lstlisting}[language=json]
 {
   "type": "actuator",
@@ -113,91 +141,76 @@ of the controlled edge device.
   }
 }
 \end{lstlisting}
-  \caption{Adafruit DHT22 and Philips Hue White Lamp Thing Descriptors}
-  \label{fig:sensor_descriptor}
+  \caption{Philips Hue White Lamp Thing Descriptor.}
+  \label{fig:sensor_descriptor_2}
 \end{figure}
-
-\subsection{Thing Descriptors}
-
-In the case study, \texttt{Driver}s are statically configured to manage a
-single fixed device using a JSON-LD 1.1 (that stands for JSON Linkage Data)
-configuration file~\cite{jsonld}. The choice of JSON-LD is not mandatory, but
-it has the benefit of following the standard W3C Web of Things~\cite{w3c17}
-definition of Thing Description (TD). This makes our \texttt{Driver}s already
-compliant with other WoT frameworks, simplifying future integrations with
-other WoT systems.
-
-While discussing the full structure of TD is out of the scope of the present
-paper, we present in \cref{fig:sensor_descriptor} examples of TDs used in our
-case study. In the top half of \cref{fig:sensor_descriptor} we report the TD
-for the DHT22 temperature sensor. For each device the JSON-LD file
-specifies whether it is a sensor or an actuator (key \lstinline|"type"|) and
-provides a textual description (key \lstinline|"description"|) and its name
-(key \lstinline|"name"|). Each Thing provides a list of
-properties (key \lstinline|"properties"|) that can be read. Each property is
-described by the property identifier, \lstinline{"temperature"} in our
-example. The property identifier has various sub-elements describing it. In
-our example we use just key \lstinline{"label"} to describe the unit of
-measure.
 
 JSON-LD configuration files for MQTT and HTTP devices are similar. Also
 configuration files for sensors and actuators are similar. As an example, we
-reported in the bottom half of \cref{fig:sensor_descriptor} the configuration
-file for Philips Hue White Lamps. There the main differences with respect to
-the previous TD (top half of \cref{fig:sensor_descriptor}) are:
+report in \cref{fig:sensor_descriptor_2} the configuration file for Philips Hue
+White Lamps. There the main differences with respect to the previous TD (\cref{fig:sensor_descriptor_1}) are:
+%
 \begin{itemize}
-  \item the \lstinline{"type"} is now {\small\color{color:comment}\texttt{"actuator"}};
-  \item the key \lstinline{"actions"} replaces the key \lstinline{"properties"};
-  \item the key \lstinline{"description"} is used also to describe the single action.
-\end{itemize}
+  
+  \item the \lstinline{"type"} is now
+  {\small\color{color:comment}\texttt{"actuator"}};
 
-In principle a TD can describe multiple properties belonging to a
-group of one or more Things controlled by the same
-\texttt{Driver}. For simplicity, here we use one TD for each Thing
-and, correspondingly, we have one \texttt{Driver} that controls one
-Thing. We also assume that each sensor provides one property.
+  \item the key \lstinline{"actions"} replaces the key
+  \lstinline{"properties"};
+
+  \item the key \lstinline{"description"} is used also to describe the single
+  action.
+
+\end{itemize}
+%
+In principle a TD can describe multiple properties belonging to a group of one
+or more edge devices controlled by the same \texttt{Driver}. For simplicity,
+here we have one TD for each edge device and, correspondingly, one
+\texttt{Driver} that controls one edge device. We also assume that each sensor
+provides one property.
 
 \subsection{System Deployment}
 
-Deployment-wise, we have a vast choice on which technology stack to use for
-the communication between the \texttt{LogicEngine} and the \texttt{Driver}s.
-Indeed, since both kinds of programs are developed in JIoT, it is easy to
-change their deployment and switch to different technology stacks. Here, we
-choose to use the HTTP/TCP stack to make our system compatible with many
-existing third-party solutions---currently HTTP/TCP is supported by the
-majority of software systems~\cite{richardson2008restful}. However, different
-technology stacks fit different purposes. The benefit of JIoT is that
-programmers can re-use the same software components adapting their deployment
-to the desired communication stacks. For example, if our goal was to minimize
-bandwidth usage we could have used the SODEP binary
-protocol~\cite{MontesiGZ14} or if we wanted to deploy our system as part of a
-Service-Oriented Architecture~\cite{Erl07}, we could have used the SOAP
-protocol. While JIoT-to-JIoT deployment is flexible, JIoT-to-Thing
-communications are limited by the technology supported by the Thing. Hence, in
-our case study each \texttt{Driver} communicates with its Thing using one of
-the protocols supported by the latter.
-
-
+Deployment-wise, JIoT provides a vast choice regarding what technology stack to
+use between the \texttt{LogicEngine} and the \texttt{Driver}s.
 %
+Moreover, since both programs are developed in JIoT, it is easy to change their
+deployment, switching to the technology stack that best suites a given scenario
+(e.g., HTTP, to exploit caching, or binary formats like
+SODEP~\cite{MontesiGZ14}, to limit bandwidth usage). Here, we choose to use the
+HTTP/TCP stack to make our system compatible with many existing third-party
+solutions --- currently HTTP/TCP is supported by the majority of software
+systems~\cite{richardson2008restful}. However, different technology stacks fit
+different purposes. The benefit of JIoT is that programmers can re-use the same
+software components adapting their deployment to the desired communication
+stacks. For example, if our goal was to be natively compatible with other
+JavaScript IoT frameworks, we could have used the JSON-RPC binary protocol; if
+we wanted to deploy our system as part of a Service-Oriented
+Architecture~\cite{Erl07}, we could have used the SOAP protocol.
+
+While JIoT-to-JIoT deployment is flexible, the deployment towards edge devices
+is defined by the technology supported by the edge device. Concretely, in our
+case study each \texttt{Driver} communicates with its edge device using (one
+of) the protocol(s) supported by the latter.
 
 
 \subsection{Components Behavior}
 
-When started, a \code{Driver} loads the TD configuration file of its Thing.
-Then it proceeds to register itself to the \code{LogicEngine}. In the
+When started, a \code{Driver} loads the TD configuration file of its edge
+device. Then it proceeds to register itself to the \code{LogicEngine}. In the
 registration, it sends the information retrieved from the TD, enriched with two
-additional pieces of information: the address where the Thing can be
-contacted---i.e., the \code{Driver} location---and the identifier of the
-user to which the Thing belongs. Once registered, the \code{Driver} acts as
-a forwarder between the \code{LogicEngine} and the Thing.
+additional pieces of information: the address where the edge device can be
+contacted --- i.e., the \code{Driver} location --- and the identifier of the
+user to which the edge device belongs. Once registered, the \code{Driver} acts
+as a forwarder between the \code{LogicEngine} and the edge device.
 
 The \code{LogicEngine} runs on the Cloud and manages a number of sensors and
 actuators. More precisely the \code{LogicEngine} has one running session for
 each user (distinguished according to the user identifier), managing all her
 sensors and actuators. Each session is associated with an array of devices
 that can be scanned to find the location of \code{device}s with particular
-properties and interact with them. As an example, we report at lines 10--27 of
-\Cref{lst:logic_example_get} procedure \code{getTemperature} of the
+properties and interact with them. As an example, we report at lines 10--26 of
+\Cref{lst:logic_example_get} the procedure \code{getTemperature} of the
 \code{LogicEngine}, which computes the average temperature recorded by the
 sensors of one user.
 %
@@ -234,7 +247,9 @@ define getTemperature {
 }
 \end{lstlisting}
 \end{figure}
-%
+
+\newpage
+
 Briefly, procedure \code{getTemperature}:
 
 \begin{itemize}
@@ -249,42 +264,16 @@ Briefly, procedure \code{getTemperature}:
   \item it dynamically sets (line 16) the location of \code{outputPort Driver}
   (lines 5-8) to contact the selected \code{Driver};
   \item it sets the request operation to \code{getTemperature} (line 17);
-  \item it retrieves the temperature sensed by the Thing controlled by the
-  selected \code{Driver}, invoking it through operation \code{engineRequest};
+  \item it retrieves the temperature sensed by the edge device controlled by
+  the selected \code{Driver}, invoking it through operation
+  \code{engineRequest};
   \item it aggregates the sensed temperature in variable \code{sum} and keeps
-  track of the number of requests in variable \code{n} (lines 19--20)
+  track of the number of requests in variable \code{n} (lines 19--20);
   \item it computes the mean \code{temperature} (lines 23--25).
 \end{itemize}
 %
 
-The procedures that calculate the mean of the sensed external luminosity and
-the one to check the presence of people at home are similar to the one in
-\cref{lst:logic_example_get}, except that the searched properties are
-\lstinline{light} in the first case, and \lstinline{motion} in the second.
-
-We report in \cref{lst:logic_example_set} one of the procedures managing
-actuators, specifically the one used to set the temperature. The main
-difference with respect to the logic in \cref{lst:logic_example_get} is that
-procedure \code{setTemperature}:
-
-\begin{itemize}
-  \item selects the \lstinline{devices} whose {\small \texttt{type}} is
-  \lstinline{"actuator"} (line 3);
-  \item sets the request operation to \code{"setTemperature"} and passes the value
-  in variable \code{comfortTemperature} as parameter of the request
-  (lines 6-7).
-\end{itemize}
-
-Note that the operation called on the \code{Driver} is \code{engineRequest}
-both in \cref{lst:logic_example_get} and \cref{lst:logic_example_set}. This
-enables to extend the \code{LogicEngine} with new procedure definitions that
-implement a given goal without requiring to change the interface between the
-\code{LogicEngine} and the \code{Driver}s. In turn, a request with the same
-\code{operationName} (e.g., \code{"setTemperature"}) triggers different
-behaviors in different \code{Driver}s, as each implements the specific logic
-of interaction with its associated Thing.
-%
-\begin{figure}[t]
+\begin{figure}[b]
 \begin{lstlisting}[
 basicstyle=\footnotesize\ttfamily,
 label=lst:logic_example_set,
@@ -303,6 +292,34 @@ define setTemperature {
 \end{lstlisting}
 \end{figure}
 
+The procedures that calculate the mean of the sensed external luminosity and
+the one to check the presence of people at home are similar to the one in
+\cref{lst:logic_example_get}, except that the searched properties are
+\lstinline{light} in the first case, and \lstinline{motion} in the second.
+
+We report in \cref{lst:logic_example_set} one of the procedures managing
+the actuators, specifically the one used to set the temperature. The main
+difference with respect to the logic in \cref{lst:logic_example_get} is that
+procedure \code{setTemperature}:
+
+\begin{itemize}
+  \item selects the \lstinline{devices} whose {\small \texttt{type}} is
+  \lstinline{"actuator"} (line 3);
+  \item sets the request operation to \code{"setTemperature"} and passes the value
+  in variable \code{comfortTemperature} as parameter of the request
+  (lines 6-7).
+\end{itemize}
+
+Note that the operation called on the \code{Driver} is \code{engineRequest}
+both in \cref{lst:logic_example_get} and \cref{lst:logic_example_set}. This
+support the extension of the \code{LogicEngine} with new procedure definitions
+that implement a given goal without requiring to change the interface between
+the \code{LogicEngine} and the \code{Driver}s. In turn, a request with the same
+\code{operationName} (e.g., \code{"setTemperature"}) triggers different
+behaviors in different \code{Driver}s, as each implements the specific logic
+of interaction with its associated edge device.
+%
+
 % They
 % would register their devices one-by-one using a suitable security scheme
 % (basic, token, api key, etc.). The selection of the security scheme can also
@@ -316,12 +333,17 @@ define setTemperature {
 We conclude this section by describing the Cloud deployment of the
 \code{LogicEngine}, which is containerized using
 Docker~\cite{Merkel:2014:DLL:2600239.2600241}. The container is deployed
-automatically into an Amazon Web Service cluster via Docker Swarm
+automatically into an Amazon Web Service cluster via the Docker Swarm
 manager~\cite{Soppelsa:2017:NDC:3153103}. The \code{LogicEngine} is deployed in
 the worker cluster, allowing the manager to balance the load of requests. We
-report below the Dockerfile used to deploy the \code{LogicEngine}.
+report in \cref{lst:docker} the content of the Dockerfile used to deploy the \code{LogicEngine}.
 %
-\begin{lstlisting}
+
+\begin{figure}[b]
+\begin{lstlisting}[
+label=lst:docker,
+caption=The Dockerfile used to deploy the \code{LogicEngine}.
+]
 <@\textcolor{red}{FROM}@> openjdk:alpine
 
 <@\textcolor{red}{RUN}@>  java -jar jiot.jar -jh /usr/lib/jolie/ -jl /usr/bin/
@@ -331,10 +353,12 @@ report below the Dockerfile used to deploy the \code{LogicEngine}.
 <@\textcolor{red}{WORKDIR}@> /home
 <@\textcolor{red}{RUN}@> jolie logic_engine.ol
 \end{lstlisting}
+\end{figure}
+
 %
 At line 1 we declare the starting image for the container, which is the
 lightweight Linux Alpine distribution with OpenJDK 8 pre-installed. At lines
 3--4 we install the JIoT fork interpreter and we set the environmental
-variable \code{JOLIE_HOME} to point to the location of the installed interpreter. Finally, at lines 6--7 we add the source code of the
+variable \code{JOLIE_HOME} to point to the location of the installed interpreter. At lines 6--7 we add the source code of the
 \code{LogicEngine} in the home directory of the image.
-Finally at line 8 we start the execution of the \code{LogicEngine}.
+Finally, at line 8 we start the execution of the \code{LogicEngine}.
