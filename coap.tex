@@ -3,7 +3,7 @@ The \textit{Constrained Application Protocol}
 for constrained scenarios where nodes have low power and networks are lossy. The
 goal of CoAP is to import the widely adopted model of REST
 architectures~\cite{fielding00} into an IoT setting, that is, optimizing it for
-Machine-to-Machine applications. In particular, like HTTP,
+machine-to-machine applications. In particular, like HTTP,
 CoAP makes use of GET, PUT,
 POST, and DELETE methods.
 %
@@ -132,12 +132,13 @@ In the example, we define \code{.osc} parameters for both operations
 \code {getTmp} and \code{setTmp}.\@ At line 13 we specify that the CoAP verb
 used for operation \code{getTmp} is \code{"GET"}. At line 14 we define, using
 the \code{.contentFormat} parameter, that the encoding of the payload of the
-message in a binary format (\code{"text/plain"}). Other accepted values for
-the \code{.contentFormat} parameter are \code{"json"} and \code{"xml"}.
-Marshalling and un-marshalling is automatic and transparent to the programmer.
-This feature is enabled by the structure of Jolie variables, which are always
-tree-shaped, hence they can easily be translated into representations based on
-that shape. At line 15 we set the \code{.messageType} parameter to
+message in text format\todo{right? Or is it \code{"raw"}? Also for
+\code{setTmp}?} (\code{"text/plain"}). Other accepted values for the
+\code{.contentFormat} parameter are \code{"json"} and \code{"xml"}. Marshalling
+and un-marshalling is automatic and transparent to the programmer. This feature
+is enabled by the structure of Jolie variables, which are always tree-shaped,
+hence they can easily be translated into representations based on that shape.
+At line 15 we set the \code{.messageType} parameter to
 \code{"CON"}, that stands for confirmable. Accepted values for the
 \code{.messageType} parameter are confirmable and not confirmable. In the
 first case the sender will receive an acknowledgment message from the
