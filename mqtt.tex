@@ -13,6 +13,7 @@ represented as in \cref{fig:pub_sub_encoding_one_way} where:
  
 \begin{figure}[th]
 % \hspace{1em}\resizebox{0.4\textwidth}{!}{
+\begin{center}  
 \begin{sequencediagram}
 \setUmlSeqChartStyle
 
@@ -24,6 +25,7 @@ represented as in \cref{fig:pub_sub_encoding_one_way} where:
   \mess{pub}{{2) Publish at (a)}}{bro}
   \mess{bro}{{3) Forward message in (a)}}{sub}
 \end{sequencediagram}
+\end{center}
 % }
 \caption{\label{fig:pub_sub_encoding_one_way}
 Typical publish/subscribe interaction pattern.}
@@ -61,8 +63,8 @@ outbound communications.
 We exemplify \code{OneWay} inbound communications using the example in
 \cref{lst:mqtt_simple_ex}, which is a revision of the example in
 \cref{temperature_interface} by omitting the ports 
-\texttt{Collector1} and \texttt{Collector2} and 
-by adding an MQTT \code{inputPort} named \texttt{Collector3}.
+\texttt{CollectorPort1} and \texttt{CollectorPort2} and 
+by adding an MQTT \code{inputPort} named \texttt{CollectorPort3}.
 %HTTP and CoAP ports and by adding an MQTT \code{inputPort}.
 
 \begin{figure}[t]
