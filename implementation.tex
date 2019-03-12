@@ -69,14 +69,13 @@ of the behavior of the Jolie program.
 
 The implementation of the CoAP library consists in a class taking care of encoding and decoding the message abstraction of Jolie, namely the Communication Message, into a CoAP formatted one. A second class, handling the encoding and decoding of a CoAP message into a buffer of bytes, is based on the work done in nCoAP~\cite{ncoap}, an open source project providing a CoAP implementation for Java, based itself on Netty.
 
-We notice that CoAP supports request-response communications and, in 
-particular, CoAP messages include fields \emph{i}) to specify 
-at which address the reply is
-expected and \emph{ii}) to match a reply with a previous request. Hence, the
-implementation of \code{RequestResponse} communications in CoAP is sound also
-with a transport protocol which is not connection-oriented, such as UDP.\@ This
-would be a problem for protocols that do not provide such a facility, such as
-HTTP, which is indeed not commonly used over UDP.
+CoAP supports request-response communications and, in particular, CoAP messages
+include fields \emph{i}) to specify at which address the reply is expected and
+\emph{ii}) to match a reply with a previous request. Hence, the implementation
+of \code{RequestResponse} communications in CoAP is sound also with a transport
+protocol which is not connection-oriented, such as UDP.\@ This would be a
+problem for protocols that do not provide such a facility, such as HTTP, which
+is indeed not commonly used over UDP.
 
 Notably, Jolie comes with a formal semantics (in terms of a process
 calculus)~\cite{Guidi2006}, which enables to rigorously reason on the behavior
@@ -101,7 +100,7 @@ requests. For this reason, given a certain medium, \code{inputPort}s and
 \code{outputPort}s use a medium-specific implementation of, respectively, a
 listener class and a channel class.
 %
-This pattern, separating listeners from senders, does not apply to
+This pattern, separating listeners from channels, does not apply to
 publish/subscribe protocols, where both the subscriber and the publisher need
 to establish a connection with the broker. In our implementation, we mediated
 between the two approaches with a Publish-Subscribe medium, which is
@@ -121,4 +120,4 @@ been described in \Cref{sub:mqtt}. Beyond being invoked when operations are exec
 MQTT class is also invoked when the program is started, to perform port
 initialization. In particular, this is when subscriptions to topics identified
 in \code{inputPort}s are performed (along with the related connections to the
-Brokers).
+brokers).
