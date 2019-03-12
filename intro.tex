@@ -208,22 +208,22 @@ interactions~\cite{req-rep}). Dually, inbound \code{OneWay} communications wait
 to receive a message, without sending a reply, while inbound \code{RequestResponse}s wait for a message
 and send back a reply.
 
-%
 Jolie supports many communication media (via keyword
 \code{Location}) and data protocols (via keyword \code{Protocol}) in a simple,
 uniform way. This is one of the main features of the Jolie language, and the
 reason why we base our approach on it.
 %
-Indeed, for each communication port the used medium and data protocol are
-declared in the deployment part of the program.  In order to change the
-used medium and protocol one just needs to change the declaration, without
-affecting the behavior part which describes the actual computation.
-Hence, functionalities defined by a single behavior can be made available using
-different media and protocols by specifying different deployments. Being born
-in the field of SOAs, Jolie supports the main communication media (TCP/IP
-sockets, Bluetooth L2CAP, Java RMI, and Unix local sockets) and data protocols
-(HTTP, JSON-RPC, XML-RPC, SOAP and their respective SSL versions) from this
-area.
+Each communication port declares the medium and data protocol used to
+communicate, hence, to switch to a different technology stack, one just needs
+to change the declaration of \code{Location} and \code{Protocol} of a given
+port. As expected, the behavior (i.e., the actual logic of computation) of any
+Jolie program is unaffected by any change to its ports. Hence, a Jolie program
+can provide the same service (i.e., the same behavior) through different media
+and protocols just by specifying different deployments. Being born in the field
+of SOAs, Jolie supports the main technologies from that area: e.g.,
+communication media like TCP/IP sockets, Bluetooth L2CAP, Java RMI, and Unix
+local sockets; and data protocols like HTTP, JSON-RPC, XML-RPC, SOAP and their
+respective SSL versions.
 
 \section{Contribution}
 \label{sec:contribution}
@@ -243,24 +243,24 @@ based on two assumptions: \emph{i}) the usage of underlying technologies that
 ensure reliable communications and \emph{ii}) a point-to-point communication
 pattern.
 
-However, both these assumptions fail when considering the two IoT technologies
-we integrate:
+However, those assumptions do not hold when considering the two IoT technologies we integrate:
 
 \begin{itemize}
  \item CoAP communications can be unreliable since they are based on UDP
-       connectionless datagrams. CoAP provides options for reliable communications,
-       however these are usually disabled in an IoT setting, since battery and
-       bandwidth preservation is important;
+       connectionless datagrams. CoAP provides options for reliable
+       communications, however these are usually disabled in an IoT setting,
+       since it is important to preserve battery and bandwidth;
 
  \item MQTT communications are based on the publish-subscribe paradigm, which
-       contrasts with the point-to-point communication found in Jolie primitives.
-       Hence, we need to define a mapping of the general abstractions of the Jolie
-       language onto the publish-subscribe paradigm, balancing two factors: \emph{i})
-       preserving the simplicity of use of the point-to-point communication style and
-       \emph{ii}) capturing the typical publish-subscribe flow of communications. Such
-       a mapping is particularly challenging in the case of request-response
-       communications. Remarkably, the mapping that we present in this work is general
-       and could be used also in other contexts.
+       contrasts with the point-to-point paradigm underlying the Jolie
+       communication primitives. Hence, we need to define a mapping to express
+       publish-subscribe operations in terms of Jolie communication abstractions. In doing so, we need to balance two factors:
+       \emph{i}) preserving the simplicity of use of the point-to-point
+       communication style and \emph{ii}) capturing the typical
+       publish-subscribe flow of communications. Such a mapping is particularly
+       challenging in the case of request-response communications. Remarkably,
+       the mapping that we present in this work is general and could be used
+       also in other contexts.
 \end{itemize}
 
 This paper integrates, revises, and extends material
@@ -304,19 +304,21 @@ communication. From preliminary discussions with collaborators and IoT
 practitioners, we collected positive opinions on the idea of using JIoT for
 programming low-level edge devices. Given these positive remarks, we
 investigated the feasibility of running JIoT programs over edge devices,
-possibly including additional language abstractions to provide low-level
-access to in-board sensors and actuators. However, our survey revealed a
-market of devices fragmented over incompatible hardware architectures and
-characterized by strong constraints over both computational power and energy
-consumption. Considering these limitations, we concluded that supporting the
-execution of JIoT-like programs over edge devices would require a strong
-engineering effort. While this research direction is promising, we deem it
-non-urgent, since currently developers tend to program very simple behaviors
-for edge devices~\cite{7123563}, which usually capture some data (e.g.,
-through one of their sensors) and then send them to mid-to-top-tier devices.
-The latter category of devices are often used to process and coordinate the
-flow of data, having more powerful hardware, reliable communication channels,
-and less constraints on energy consumption. Based on this considerations, in
-this work we omit the low-level programming of edge devices and we focus on
-mid-to-top-tier ones, which can host the JIoT runtime and whose topological
-context benefits from the flexibility of the approach.
+possibly including additional language abstractions to provide low-level access
+to in-board sensors and actuators. However, our survey revealed a market of
+devices fragmented over incompatible hardware architectures and characterized
+by strong constraints over both computational power and energy consumption.
+Considering these limitations, we concluded that supporting the execution of
+JIoT-like programs over edge devices would require a strong engineering effort.
+While this research direction is promising, we deem it non-urgent, since
+currently developers tend to program very simple behaviors for edge
+devices~\cite{7123563}, which usually capture some data (e.g., through one of
+their sensors) and then send them to mid-to-top-tier devices. The latter
+usually process and coordinate the flow of data: they have powerful hardware,
+they communicate over reliable channels, and they have fewer (if any)
+constraints with respect to battery/energy consumption. 
+
+Considered the discussion above, in this work we omit the low-level programming
+of edge devices and we focus on mid-to-top-tier ones, which can host the JIoT
+runtime and which, given their topological context, directly benefit from the
+flexibility of the approach.
