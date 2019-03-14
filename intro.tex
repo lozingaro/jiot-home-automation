@@ -140,8 +140,7 @@ communications via \code{Protocol} \code{http} using a TCP/IP socket receiving
 at URL \code{"localhost"} on TCP port \code{8000}. A port exposes a set of
 operations, collected within a set of \code{Interfaces}. In the example, the
 input port \code{CollectorPort1} declares to expose interface
-\code{TemperatureInterface}, which is defined at lines 1--3 of Listing of
-\code{interface} is declared at lines 1--3 of \cref{lst:ex_port}. The interface
+\code{TemperatureInterface}, which is defined at lines 1--3 of \cref{lst:ex_port}. The interface
 declares the operation \code{receiveTemperature}, including the type of expected
 data (\code{string}), as a \code{OneWay} operation, namely an asynchronous
 communication that does not require any reply from the collector (except the
@@ -237,7 +236,7 @@ the IoT setting. Concretely, the added contribution of JIoT with respect to
 Jolie is the integration of two application protocols relevant in the IoT
 scenario, namely CoAP~\cite{doi:10.17487/RFC7252,coap} and
 MQTT~\cite{mqtt-v3.1.1,mqtt}. Notably, in JIoT the usage of such protocols is
-supported by the same linguistic abstractions that Jolie uses for SOAs protocols
+supported by the same linguistic abstractions that Jolie uses for SOA protocols
 such as HTTP and SOAP.
 
 Even if Jolie provides support for the integration of new protocols, when set in
