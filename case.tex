@@ -71,10 +71,9 @@ We now describe the structure of the orchestration in the case study, which is
 illustrated in~\cref{fig:case_study_abstraction}.
 %
 The orchestration is composed of multiple JIoT programs. From top to bottom of
-\cref{fig:case_study_abstraction}, the \texttt{LogicEngine} \todo{Mettere anche
-``Engine'' in bold in \cref{fig:case_study_abstraction}} contains the general
+\cref{fig:case_study_abstraction}, the \texttt{LogicEngine} contains the general
 logic of system control (i.e., the one that collects the data from sensors and
-coordinates the execution of the actions in the system). Since the
+coordinates the execution of the actuators in the system). Since the
 \texttt{LogicEngine} interacts with a multitude of mid-tier devices, its
 natural deployment is in the Cloud, where it is possible to scale it according
 to the number of managed devices and the load of computation. At the mid-tier

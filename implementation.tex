@@ -30,7 +30,7 @@ generalized with abstract factories for media and protocols. At runtime, the
 factory requested in the call from the \textsf{Execution Engine} --- in the
 figure we assume this is \textsf{Socket} --- and, from that, it obtains an
 implementation of the actual logic of TCP/IP channels, split between a channel
-class, to handle outbound communications, and listener class, for inbound
+class, to handle outbound communications, and a listener class, for inbound
 communications. Finally, the \textsf{Communication Core} associates (arrows
 \circled{2}) a protocol to the obtained medium. The flow is similar to that of
 media: the \textsf{Communication Core} loads the protocol factory requested in
