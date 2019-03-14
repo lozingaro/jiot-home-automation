@@ -201,7 +201,7 @@ outputPort Broker {
  Location: "socket://localhost:1883"
  Protocol: mqtt {
   .osc.setTmp << {
-   .contentFormat = "raw",
+   .format = "raw",
    .QoS = 2, // exactly once QoS
    .alias = "%!{id}/setTemperature"
   }
@@ -227,10 +227,10 @@ of the Broker is defined by the \code{Location} (line 6) of the
 \code{operation} and the parameter of the invocation, using protocol parameter
 \code{.alias} as usual. Being an MQTT publication, we specify the \code{.QoS}
 protocol parameter (line 10), which selects the QoS level ``Exactly once'' for
-the operation \code{setTmp}. Similarly to what we have done in CoAP,
-%with the
-%\code{contentFormat} protocol parameter
-we define in \code{.contentFormat} the
+the operation \code{setTmp}. Similarly to what we have done in CoAP
+with the
+\code{contentFormat} protocol parameter,
+we define in \code{.format} the
 encoding of the message payload, in this case a ``raw'' stream of bytes.
 
 
@@ -257,7 +257,7 @@ outputPort Broker {
  Location: "socket://localhost:1883"
  Protocol: mqtt {
   .osc.getTmp << {
-   .contentFormat = "raw",
+   .format = "raw",
    .QoS = 2, // exactly once QoS
    .alias = "%!{id}/getTemperature",
    .aliasResponse = "%!{id}/getTempReply"
@@ -376,7 +376,7 @@ inputPort Thermostat {
  Protocol: mqtt {
   .broker = "socket://localhost:1883";
   .osc.getTmp << {
-   .contentFormat = "raw",
+   .format = "raw",
    .alias = "42/getTemperature",
    .aliasResponse = "42/getTempReply"
   }
