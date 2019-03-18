@@ -173,19 +173,19 @@ provides one property.
 Deployment-wise, JIoT provides a vast choice regarding what technology stack to
 use between the \texttt{LogicEngine} and the \texttt{Driver}s.
 %
-Moreover, since both programs are developed in JIoT, it is easy to change their
-deployment, switching to the technology stack that best suites a given scenario
-(e.g., HTTP, to exploit caching, or binary formats like
-SODEP~\cite{MontesiGZ14}, to limit bandwidth usage). Here, we choose to use the
-HTTP/TCP stack to make our system compatible with many existing third-party
-solutions --- currently HTTP/TCP is supported by the majority of software
-systems~\cite{richardson2008restful}. However, different technology stacks fit
-different purposes. The benefit of JIoT is that programmers can re-use the same
-software components adapting their deployment to the desired communication
-stacks. For example, if our goal was to be natively compatible with other
-JavaScript IoT frameworks, we could have used the JSON-RPC binary protocol; if
-we wanted to deploy our system as part of a Service-Oriented
-Architecture~\cite{Erl07}, we could have used the SOAP protocol.
+Moreover, since both programs are developed in JIoT, it is easy to change
+their deployment, switching to the technology stack that best suites a given
+scenario (e.g., HTTP, to exploit caching, or binary formats like
+SODEP~\cite{MontesiGZ14}, to limit bandwidth usage). Here, we choose to use
+the HTTP/TCP stack to make our system compatible with the majority of existing
+third-party solutions~\cite{richardson2008restful}. However, different
+technology stacks fit different purposes. The benefit of JIoT is that
+programmers can re-use the same software components adapting their deployment
+to the desired communication stacks. For example, if our goal was to be
+natively compatible with other JavaScript IoT frameworks, we could have used
+the JSON-RPC binary protocol; if we wanted to deploy our system as part of a
+Service-Oriented Architecture~\cite{Erl07}, we could have used the SOAP
+protocol.
 
 While JIoT-to-JIoT deployment is flexible, the deployment towards edge devices
 is defined by the technology supported by the edge device. Concretely, in our
@@ -193,26 +193,6 @@ case study each \texttt{Driver} communicates with its edge device using (one
 of) the protocol(s) supported by the latter.
 
 
-\subsection{Components Behavior}
-
-When started, a \code{Driver} loads the TD configuration file of its edge
-device. Then it proceeds to register itself to the \code{LogicEngine}. In the
-registration, it sends the information retrieved from the TD, enriched with two
-additional pieces of information: the address where the edge device can be
-contacted --- i.e., the \code{Driver} location --- and the identifier of the
-user to which the edge device belongs. Once registered, the \code{Driver} acts
-as a forwarder between the \code{LogicEngine} and the edge device.
-
-The \code{LogicEngine} runs on the Cloud and manages a number of sensors and
-actuators. More precisely the \code{LogicEngine} has one running session for
-each user (distinguished according to the user identifier), managing all her
-sensors and actuators. Each session is associated with an array of devices
-that can be scanned to find the location of \code{device}s with particular
-properties and interact with them. As an example, we report at lines 10--26 of
-\Cref{lst:logic_example_get} the procedure \code{getTemperature} of the
-\code{LogicEngine}, which computes the average temperature recorded by the
-sensors of one user.
-%
 \begin{figure}[b]
 \begin{lstlisting}[
 basicstyle=\footnotesize\ttfamily,
@@ -246,6 +226,26 @@ define getTemperature {
 }
 \end{lstlisting}
 \end{figure}
+
+\subsection{Components Behavior}
+
+When started, a \code{Driver} loads the TD configuration file of its edge
+device. Then it registers itself to the \code{LogicEngine}. In the
+registration, it sends the information retrieved from the TD, enriched with two
+additional pieces of information: the address where the edge device can be
+contacted --- i.e., the \code{Driver} location --- and the identifier of the
+user to which the edge device belongs. Once registered, the \code{Driver} acts
+as a forwarder between the \code{LogicEngine} and the edge device.
+
+The \code{LogicEngine} runs on the Cloud and manages a number of sensors and
+actuators. More precisely the \code{LogicEngine} has one running session for
+each user (distinguished according to the user identifier), managing all her
+sensors and actuators. Each session is associated with an array of devices
+that can be scanned to find the location of \code{device}s with specific
+properties and interact with them; e.g., at lines 10--26 of
+\Cref{lst:logic_example_get} the procedure \code{getTemperature} of the
+\code{LogicEngine}, computing the average temperature recorded by the
+sensors of one user.
 
 \newpage
 
